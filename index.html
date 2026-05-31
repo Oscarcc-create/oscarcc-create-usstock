@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>美股与A股主要指数历史年度表现分析</title>
+  <meta name="description" content="分析标普500、纳斯达克综合指数、沪深300的历史年度表现。数据可视化呈现三大指数的年度涨跌、波动特征与长期规律，帮助投资者建立对中美股市的基本认知。">
+  <meta name="robots" content="index,follow">
+  <meta property="og:title" content="美股与A股主要指数历史年度表现分析">
+  <meta property="og:description" content="标普500 · 纳斯达克 · 沪深300 — 三大指数历史年度表现一览">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="site-header">
+      <div class="brand-area">
+        <div class="brand-logos">
+          <span class="index-badge spx">S&P</span>
+          <span class="index-badge ndx">NDX</span>
+          <span class="index-badge hs3">沪深300</span>
+        </div>
+        <a class="brand" href="/">美股与A股主要指数历史年度表现</a>
+      </div>
+      <nav class="nav">
+        <a href="#sp500">标普500</a>
+        <a href="#nasdaq">纳斯达克</a>
+        <a href="#hs300">沪深300</a>
+        <a href="#compare">横向对比</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="editorial-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">For Investors · 历史不会重复，但会押韵</p>
+          <h1>标普500 · 纳斯达克<br>沪深300 历史年度表现</h1>
+          <p class="lead tl-dr"><strong>核心结论：</strong>过去26年，标普500 年化回报约7.4%，纳斯达克约8.4%，沪深300（全收益）约9.1%。但三大指数的波动特征截然不同：美股"慢牛快熊"，A股"急涨急跌"。理解这种差异，比预测涨跌更重要。</p>
+          <div class="hero-metrics">
+            <div class="metric-card">
+              <strong>26年</strong>
+              <span>标普500 / 纳斯达克数据跨度</span>
+            </div>
+            <div class="metric-card">
+              <strong>21年</strong>
+              <span>沪深300数据跨度</span>
+            </div>
+            <div class="metric-card">
+              <strong>7:26</strong>
+              <span>标普500下跌年份比例</span>
+            </div>
+            <div class="metric-card">
+              <strong>~70%</strong>
+              <span>美股上涨年份占比</span>
+            </div>
+          </div>
+        </div>
+        <aside class="hero-side">
+          <p class="eyebrow">关于三大指数</p>
+          <div class="entity-block entity-spx">
+            <h2>标普500</h2>
+            <p>美国500家大型上市公司市值加权指数，覆盖约80%的美国股市总市值。全球最重要的权益资产基准，长期年化回报约7–10%（含分红）。</p>
+          </div>
+          <div class="entity-block entity-ndx">
+            <h2>纳斯达克综合指数</h2>
+            <p>纳斯达克交易所全部上市公司组成的指数，科技股权重极高。波动显著大于标普500——涨时更猛，跌时更深。</p>
+          </div>
+          <div class="entity-block entity-hs3">
+            <h2>沪深300</h2>
+            <p>沪深两市市值最大、流动性最好的300只A股组成的指数。代表中国A股核心资产，但波动剧烈，牛短熊长特征明显。</p>
+          </div>
+          <div class="citation-block">
+            <p class="eyebrow">数据说明</p>
+            <p>标普500与纳斯达克数据为价格指数（不含分红），沪深300列出价格指数与全收益指数（含分红再投资）双口径。</p>
+          </div>
+        </aside>
+      </section>
+
+      <!-- S&P 500 -->
+      <section class="panel index-detail" id="sp500">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">美股 · 大盘基准</p>
+            <h2>标普500 历年表现</h2>
+          </div>
+          <div class="section-stats">
+            <div class="stat-item"><strong>+7.4%</strong><span>价格指数年化</span></div>
+            <div class="stat-item"><strong>~10%</strong><span>含分红年化</span></div>
+            <div class="stat-item"><strong>70%</strong><span>上涨年份占比</span></div>
+            <div class="stat-item pos">19年上涨</div>
+            <div class="stat-item neg">7年下跌</div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="sp500Chart"></canvas>
+        </div>
+        <div class="index-insight">
+          <h3>关键观察</h3>
+          <ul>
+            <li><strong>3次重大回撤：</strong>2000–2002年（互联网泡沫，连跌3年累计-40%）、2008年（金融危机 -38.5%）、2022年（加息冲击 -19.4%）</li>
+            <li><strong>最长连胜：</strong>2003–2007年连涨5年，以及2019–2021年连涨3年</li>
+            <li><strong>回撤后反弹力度：</strong>每次大跌次年全部收红——2003年+26%、2009年+23%、2023年+24%。从未连续两年大跌</li>
+            <li><strong>温和年份居多：</strong>约一半年份涨幅在 0–20% 之间，属于"慢牛"特征</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Nasdaq -->
+      <section class="panel index-detail" id="nasdaq">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">美股 · 科技成长</p>
+            <h2>纳斯达克综合指数 历年表现</h2>
+          </div>
+          <div class="section-stats">
+            <div class="stat-item"><strong>+8.4%</strong><span>价格指数年化</span></div>
+            <div class="stat-item"><strong>±20%+</strong><span>涨跌超20%年份</span></div>
+            <div class="stat-item"><strong>73%</strong><span>上涨年份占比</span></div>
+            <div class="stat-item pos">19年上涨</div>
+            <div class="stat-item neg">7年下跌</div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="nasdaqChart"></canvas>
+        </div>
+        <div class="index-insight">
+          <h3>关键观察</h3>
+          <ul>
+            <li><strong>极致波动：</strong>最好年份 +50%（2003），最差年份 -40.5%（2008）。涨跌幅绝对值显著大于标普500</li>
+            <li><strong>互联网泡沫创伤深重：</strong>2000–2002三年累计跌超 70%，直到2015年才真正突破2000年高点</li>
+            <li><strong>2023–2025年异常强劲：</strong>三年累计涨幅超过 120%，AI浪潮驱动</li>
+            <li><strong>盈亏同源：</strong>科技属性带来更高长期回报，但代价是更高的波动和更深的回撤</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 沪深300 -->
+      <section class="panel index-detail" id="hs300">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">A股 · 核心资产</p>
+            <h2>沪深300 历年表现</h2>
+          </div>
+          <div class="section-stats">
+            <div class="stat-item"><strong>+7.1%</strong><span>价格指数年化</span></div>
+            <div class="stat-item"><strong>+9.1%</strong><span>全收益指数年化</span></div>
+            <div class="stat-item"><strong>62%</strong><span>上涨年份占比</span></div>
+            <div class="stat-item pos">13年上涨</div>
+            <div class="stat-item neg">8年下跌</div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="hs300Chart"></canvas>
+        </div>
+        <div class="index-insight">
+          <h3>关键观察</h3>
+          <ul>
+            <li><strong>极值年份惊人：</strong>2007年暴涨+161.5%，2008年暴跌-65.9%。这种级别的波动在美股几乎不会出现</li>
+            <li><strong>牛短熊长：</strong>大涨集中在一两年内完成，随后是漫长的阴跌或横盘（2010–2014连跌/横盘5年，2021–2023连跌3年）</li>
+            <li><strong>分红贡献不容忽视：</strong>全收益年化比价格指数高约2个百分点，长期复利效果显著</li>
+            <li><strong>近期触底反弹：</strong>经历2021–2023三连跌后，2024–2025连续两年回升</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Side by Side Comparison -->
+      <section class="panel index-detail" id="compare">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">横向对比</p>
+            <h2>三大指数同框</h2>
+          </div>
+          <p class="section-subtitle">统一以价格指数口径对比，观察不同市场的年度回报特征</p>
+        </div>
+        <div class="chart-container" style="max-height: 550px; overflow-y: auto;">
+          <canvas id="compareChart"></canvas>
+        </div>
+        <div class="compare-grid">
+          <div class="compare-card">
+            <h3>标普500 vs 纳斯达克</h3>
+            <p>两者高度正相关（同年同涨同跌比例约96%），但纳斯达克弹性约为标普500的<strong>1.2–1.5倍</strong>——涨时更涨，跌时更跌。科技行业权重差异是唯一解释。</p>
+          </div>
+          <div class="compare-card">
+            <h3>美股 vs A股</h3>
+            <p>沪深300与美股的年度相关性极低，甚至偶尔为负。2022年两者同步下跌（全球紧缩），但2023年美股大涨+24%、沪深300继续下跌-11%。<strong>中美股市驱动逻辑差异巨大</strong>。</p>
+          </div>
+          <div class="compare-card">
+            <h3>核心差异</h3>
+            <p><strong>波动率：</strong>沪深300 ＞ 纳斯达克 ＞ 标普500<br>
+            <strong>上涨概率：</strong>标普500 ≈ 纳斯达克 ＞ 沪深300<br>
+            <strong>极端年份频率：</strong>沪深300（±50%常见） ≫ 纳斯达克（±30%偶发） ＞ 标普500（±20%即属罕见）</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Key Conclusions -->
+      <section class="panel prose conclusions" id="conclusions">
+        <h2>核心结论</h2>
+        <ol>
+          <li><strong>美股是"慢牛快熊"：</strong>标普500下跌年份仅占27%，且跌幅多在10–20%范围内。大跌后次年无一例外全部上涨。长期持有标普500指数基金（尤其是含分红）是普通投资者最可靠的财富积累方式之一。</li>
+          <li><strong>纳斯达克是标普500的"杠杆版"：</strong>长期回报略高，但代价是更剧烈的波动。适合能承受更大回撤、投资期限更长的投资者。</li>
+          <li><strong>A股的挑战不在收益而在波动：</strong>沪深300全收益年化约9.1%，长期回报并不差。问题在于波动巨大（±50%年份并不罕见），投资者常在高点冲入、低点割肉，实际回报远低于指数本身。</li>
+          <li><strong>分红再投资的复利效果：</strong>标普500含分红年化比价格指数高约2.6%，沪深300高约2%。长期持有+分红再投资是获取指数真实回报的关键。</li>
+          <li><strong>不预测，要应对：</strong>历史数据说明，没有人能持续预测年度涨跌。但了解每个市场的波动特征，有助于建立合理的收益预期和风险承受框架。</li>
+        </ol>
+      </section>
+
+      <section class="bottom-strip">
+        <p>数据来源：Macrotrends、雪球、东方财富。标普500与纳斯达克数据为价格指数口径。</p>
+        <strong>投资有风险，历史表现不代表未来收益。</strong>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>数据公开可查，结论仅供参考。本站面向投资者与研究者开放浏览。</p>
+    </footer>
+  </div>
+  <script src="/assets/site.js"></script>
+</body>
+</html>
