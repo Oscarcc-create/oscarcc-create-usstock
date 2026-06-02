@@ -183,6 +183,7 @@ a{color:inherit;text-decoration:none}a:hover{opacity:0.76}
 <a href="#nasdaq">纳斯达克</a>
 <a href="#hs300">沪深300</a>
 <a href="#compare">横向对比</a>
+<a href="#drawdowns">回撤分析</a>
 <a href="#conclusions">结论</a>
 </nav>
 </header>
@@ -312,6 +313,259 @@ a{color:inherit;text-decoration:none}a:hover{opacity:0.76}
 <p><strong>沪深300（标准差31%）≫ 纳斯达克（21%）＞ 标普500（13%）</strong><br>
 沪深300的±50%年份几乎每3–5年出现一次，而标普500±30%以上55年只出现6次。A股投资者需要更强的心理承受力。</p>
 </div>
+</div>
+</section>
+
+<!-- ═══ DRAWDOWN ANALYSIS ═══ -->
+<section class="panel" id="drawdowns">
+<div class="section-head">
+<div><p class="eyebrow">回撤分析 · 重大事件 · 1973–2025</p><h2>标普500 & 纳斯达克 重大回撤事件</h2></div>
+<p class="section-subtitle">统计>10%回撤的完整清单，含原因归类、回撤幅度、恢复时间与回撤后30/60/180天表现</p>
+</div>
+
+<style>
+.drawdown-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:16px}
+.drawdown-table th{text-align:left;padding:10px 7px;border-bottom:2px solid var(--line);color:var(--ink-muted);font-weight:600;font-size:11px;letter-spacing:0.04em;background:rgba(251,248,242,0.6);position:sticky;top:0;white-space:nowrap}
+.drawdown-table td{padding:8px 7px;border-bottom:1px solid var(--line);color:var(--ink-soft);line-height:1.45}
+.drawdown-table tr:hover td{background:rgba(251,248,242,0.5)}
+.drawdown-table .tag{padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;white-space:nowrap}
+.tag-recession{background:#fef0f0;color:#c0392b}
+.tag-policy{background:#fdf3e0;color:#d2691e}
+.tag-geo{background:#f0f0fe;color:#3a3a9f}
+.tag-bubble{background:#f3e8ff;color:#7b2d8e}
+.tag-shock{background:#e8f5e9;color:#1b5e20}
+.tag-financial{background:#fff3e0;color:#c62828}
+.drawdown-viz{position:relative;height:340px;margin:20px 0;background:rgba(251,248,242,0.4);border:1px solid var(--line)}
+.drawdown-viz svg{width:100%;height:100%}
+.drawdown-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.dd-card{padding:16px;background:rgba(251,248,242,0.6);border:1px solid var(--line)}
+.dd-card strong{display:block;font-family:var(--serif);font-style:italic;font-size:32px;line-height:1;margin-bottom:4px}
+.dd-card span{font-size:12px;color:var(--ink-muted)}
+@media(max-width:900px){.drawdown-table{font-size:10px}.drawdown-table th,.drawdown-table td{padding:6px 4px}}
+</style>
+
+<div class="drawdown-summary">
+<div class="dd-card"><strong>16</strong><span>标普500 ≥10%回撤事件<br>(1973–2025)</span></div>
+<div class="dd-card"><strong>12</strong><span>纳斯达克 ≥15%回撤事件<br>(1973–2025)</span></div>
+<div class="dd-card"><strong>-57%</strong><span>最深回撤（2008金融危机）</span></div>
+<div class="dd-card"><strong>-78%</strong><span>纳斯达克最深回撤（2000泡沫）</span></div>
+<div class="dd-card"><strong>33天</strong><span>最短回撤（2020新冠疫情）</span></div>
+<div class="dd-card"><strong>929天</strong><span>最长回撤（2000互联网泡沫）</span></div>
+</div>
+
+<!-- Drawdown waterfall SVG -->
+<div class="drawdown-viz">
+<svg id="dd-svg"></svg>
+</div>
+
+<!-- S&P 500 drawdown table -->
+<h3 style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;margin:0 0 8px;">标普500 重大回撤一览（>10%）</h3>
+<div style="overflow-x:auto">
+<table class="drawdown-table">
+<thead><tr>
+<th>#</th><th>时间段</th><th>高点</th><th>低点</th><th>跌幅</th><th>创新低<br>天数</th><th>再创新高<br>天数</th>
+<th>30天后</th><th>60天后</th><th>180天后</th><th>原因归类</th><th>详细原因</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>1973.1.11 – 1974.10.3</td><td>120.24</td><td>62.28</td><td class="dn">-48.2%</td><td>630</td><td>1,526</td>
+<td class="dn">-2.1%</td><td class="up">+3.8%</td><td class="up">+31.5%</td>
+<td><span class="tag tag-geo">地缘政治</span></td>
+<td>第四次中东战争→OPEC石油禁运；油价×3；美国通胀>12%；滞胀+经济衰退</td>
+</tr>
+<tr>
+<td>2</td><td>1980.2.13 – 1980.3.27</td><td>118.44</td><td>98.22</td><td class="dn">-17.1%</td><td>43</td><td>168</td>
+<td class="up">+5.2%</td><td class="up">+12.8%</td><td class="up">+27.3%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>沃尔克加息遏制通胀；联邦基金利率升至~20%；经济衰退担忧</td>
+</tr>
+<tr>
+<td>3</td><td>1980.11.28 – 1982.8.12</td><td>140.52</td><td>102.42</td><td class="dn">-27.1%</td><td>622</td><td>456</td>
+<td class="up">+1.5%</td><td class="up">+8.9%</td><td class="up">+36.0%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>沃尔克继续激进加息；联邦基金利率20%→深度衰退；企业盈利大幅下降；失业率>10%</td>
+</tr>
+<tr>
+<td>4</td><td>1983.10.10 – 1984.7.24</td><td>172.65</td><td>147.82</td><td class="dn">-14.4%</td><td>288</td><td>541</td>
+<td class="up">+3.2%</td><td class="up">+7.1%</td><td class="up">+22.6%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>1984年升息周期；新兴市场债务危机（墨西哥违约）</td>
+</tr>
+<tr>
+<td>5</td><td>1987.8.25 – 1987.12.4</td><td>336.77</td><td>223.92</td><td class="dn">-33.5%</td><td>101</td><td>549</td>
+<td class="up">+12.8%</td><td class="up">+18.2%</td><td class="up">+26.4%</td>
+<td><span class="tag tag-shock">技术冲击</span></td>
+<td>10/19"黑色星期一"单日暴跌-22.6%；程序化交易+组合保险引发自动踩踏式抛售；美元贬值+贸易赤字</td>
+</tr>
+<tr>
+<td>6</td><td>1990.7.16 – 1990.10.11</td><td>368.95</td><td>295.46</td><td class="dn">-19.9%</td><td>87</td><td>178</td>
+<td class="up">+2.6%</td><td class="up">+7.8%</td><td class="up">+18.5%</td>
+<td><span class="tag tag-geo">地缘政治</span></td>
+<td>伊拉克入侵科威特→海湾战争→油价翻倍；美国温和衰退；储贷危机</td>
+</tr>
+<tr>
+<td>7</td><td>1998.7.17 – 1998.8.31</td><td>1,186.75</td><td>957.28</td><td class="dn">-19.3%</td><td>45</td><td>95</td>
+<td class="up">+8.4%</td><td class="up">+19.2%</td><td class="up">+24.7%</td>
+<td><span class="tag tag-financial">金融传染</span></td>
+<td>亚洲金融危机→俄罗斯债务违约→LTCM对冲基金几乎崩盘；美联储紧急降息救市</td>
+</tr>
+<tr>
+<td>8</td><td>1999.7.16 – 1999.10.15</td><td>1,418.78</td><td>1,247.41</td><td class="dn">-12.1%</td><td>91</td><td>84</td>
+<td class="up">+6.3%</td><td class="up">+10.1%</td><td class="up">+15.8%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>美联储加息周期（1999年6月-11月加息3次）；科技股估值过高担忧；Y2K恐惧</td>
+</tr>
+<tr>
+<td>9</td><td>2000.3.24 – 2002.10.9</td><td>1,527.46</td><td>776.76</td><td class="dn">-49.1%</td><td>929</td><td>1,812</td>
+<td class="up">+1.3%</td><td class="up">+6.7%</td><td class="dn">-11.3%</td>
+<td><span class="tag tag-bubble">估值泡沫</span></td>
+<td>互联网估值泡沫破裂；99-00年6次加息；2001年911恐袭；安然/世通财务丑闻</td>
+</tr>
+<tr>
+<td>10</td><td>2007.10.9 – 2009.3.9</td><td>1,565.15</td><td>676.53</td><td class="dn">-56.8%</td><td>517</td><td>1,472</td>
+<td class="up">+12.3%</td><td class="up">+26.5%</td><td class="up">+45.8%</td>
+<td><span class="tag tag-financial">系统性金融</span></td>
+<td>次贷危机→雷曼兄弟破产（2008.9）→MBS/CDO崩盘→全球信贷冻结→政府救市</td>
+</tr>
+<tr>
+<td>11</td><td>2010.4.23 – 2010.7.2</td><td>1,217.28</td><td>1,022.58</td><td class="dn">-16.0%</td><td>70</td><td>165</td>
+<td class="up">+7.3%</td><td class="up">+12.4%</td><td class="up">+21.2%</td>
+<td><span class="tag tag-financial">金融传染</span></td>
+<td>欧债危机（希腊）→欧洲主权债务恐慌；Flash Crash闪电崩盘（5/6 -9%）</td>
+</tr>
+<tr>
+<td>12</td><td>2011.4.29 – 2011.10.3</td><td>1,363.61</td><td>1,099.23</td><td class="dn">-19.4%</td><td>157</td><td>132</td>
+<td class="up">+10.8%</td><td class="up">+15.2%</td><td class="up">+22.3%</td>
+<td><span class="tag tag-policy">政治+信用</span></td>
+<td>美国债务上限危机→标普史上首次下调美国AAA评级；欧债危机升级（意大利/西班牙）</td>
+</tr>
+<tr>
+<td>13</td><td>2018.9.20 – 2018.12.24</td><td>2,930.75</td><td>2,351.10</td><td class="dn">-19.8%</td><td>95</td><td>98</td>
+<td class="up">+7.9%</td><td class="up">+14.1%</td><td class="up">+25.0%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>美联储缩表+加息；中美贸易战升级；全球经济放缓担忧；Q4流动性枯竭</td>
+</tr>
+<tr>
+<td>14</td><td>2020.2.19 – 2020.3.23</td><td>3,386.15</td><td>2,237.40</td><td class="dn">-33.9%</td><td>33</td><td>142</td>
+<td class="up">+27.5%</td><td class="up">+35.2%</td><td class="up">+52.4%</td>
+<td><span class="tag tag-shock">外部冲击</span></td>
+<td>COVID-19全球疫情→封城→经济冻结→4次熔断；美联储无限量QE+零利率</td>
+</tr>
+<tr>
+<td>15</td><td>2022.1.3 – 2022.10.12</td><td>4,796.56</td><td>3,577.03</td><td class="dn">-25.4%</td><td>282</td><td>477</td>
+<td class="up">+2.1%</td><td class="up">+6.7%</td><td class="up">+14.3%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>CPI 9.1%→40年新高；美联储7次加息（0→4.5%）+缩表；俄乌冲突推高能源/粮食价格</td>
+</tr>
+<tr>
+<td>16</td><td>2023.7.31 – 2023.10.27</td><td>4,588.96</td><td>4,117.37</td><td class="dn">-10.3%</td><td>88</td><td>56</td>
+<td class="up">+9.1%</td><td class="up">+15.5%</td><td class="up">+27.6%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>美债收益率飙升（10Y→5%）+地缘紧张（巴以冲突）；市场消化"higher for longer"预期</td>
+</tr>
+</tbody></table>
+</div>
+
+<!-- Nasdaq drawdown table -->
+<h3 style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;margin:28px 0 8px;">纳斯达克综合指数 重大回撤一览（>15%）</h3>
+<div style="overflow-x:auto">
+<table class="drawdown-table">
+<thead><tr>
+<th>#</th><th>时间段</th><th>高点</th><th>低点</th><th>跌幅</th><th>创新低<br>天数</th><th>再创新高<br>天数</th>
+<th>30天后</th><th>60天后</th><th>180天后</th><th>原因归类</th><th>详细原因</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td><td>1973.1 – 1974.9</td><td>136.84</td><td>62.36</td><td class="dn">-54.6%</td><td>630</td><td>1,314</td>
+<td class="dn">-1.8%</td><td class="up">+5.2%</td><td class="up">+28.6%</td>
+<td><span class="tag tag-geo">地缘政治</span></td>
+<td>石油危机+滞胀；高通胀+经济衰退三重打击</td>
+</tr>
+<tr>
+<td>2</td><td>1987.8 – 1987.12</td><td>455.85</td><td>291.86</td><td class="dn">-36.0%</td><td>~100</td><td>~549</td>
+<td class="up">+10.1%</td><td class="up">+15.7%</td><td class="up">+23.2%</td>
+<td><span class="tag tag-shock">技术冲击</span></td>
+<td>黑色星期一程序化交易崩盘；科技股遭遇恐慌抛售</td>
+</tr>
+<tr>
+<td>3</td><td>1990.7 – 1990.10</td><td>471.50</td><td>327.94</td><td class="dn">-30.5%</td><td>~90</td><td>~180</td>
+<td class="up">+3.4%</td><td class="up">+9.2%</td><td class="up">+21.8%</td>
+<td><span class="tag tag-geo">地缘政治</span></td>
+<td>海湾战争+衰退；银行业危机</td>
+</tr>
+<tr>
+<td>4</td><td>1998.7 – 1998.10</td><td>2,014.25</td><td>1,419.12</td><td class="dn">-29.5%</td><td>80</td><td>98</td>
+<td class="up">+11.5%</td><td class="up">+22.8%</td><td class="up">+32.1%</td>
+<td><span class="tag tag-financial">金融传染</span></td>
+<td>亚洲危机→俄罗斯违约→LTCM崩盘；流动性恐慌</td>
+</tr>
+<tr>
+<td>5</td><td>2000.3.10 – 2002.10.9</td><td>5,048.62</td><td>1,114.11</td><td class="dn">-77.9%</td><td>943</td><td>5,479</td>
+<td class="up">+1.5%</td><td class="dn">-2.3%</td><td class="dn">-18.6%</td>
+<td><span class="tag tag-bubble">估值泡沫</span></td>
+<td>互联网泡沫→纳斯达克PE>150倍→2000年3月崩盘→911+丑闻→跌78%。直到2015年才收复5000点。</td>
+</tr>
+<tr>
+<td>6</td><td>2007.10.31 – 2009.3.9</td><td>2,859.12</td><td>1,268.64</td><td class="dn">-55.6%</td><td>495</td><td>1,463</td>
+<td class="up">+10.4%</td><td class="up">+23.7%</td><td class="up">+41.0%</td>
+<td><span class="tag tag-financial">系统性金融</span></td>
+<td>全球金融危机；雷曼破产→信贷冻结；科技股经历次贷冲击</td>
+</tr>
+<tr>
+<td>7</td><td>2011.5 – 2011.10</td><td>2,887.75</td><td>2,335.82</td><td class="dn">-19.1%</td><td>~150</td><td>~100</td>
+<td class="up">+8.3%</td><td class="up">+14.6%</td><td class="up">+26.8%</td>
+<td><span class="tag tag-policy">政治+信用</span></td>
+<td>美国债务上限危机+评级下调；欧债危机</td>
+</tr>
+<tr>
+<td>8</td><td>2018.10 – 2018.12</td><td>8,109.69</td><td>6,192.92</td><td class="dn">-23.6%</td><td>~90</td><td>~120</td>
+<td class="up">+8.2%</td><td class="up">+12.4%</td><td class="up">+22.8%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>美联储缩表+加息；中美贸易战；科技股对利率敏感</td>
+</tr>
+<tr>
+<td>9</td><td>2020.2.19 – 2020.3.23</td><td>9,838.37</td><td>6,860.67</td><td class="dn">-30.3%</td><td>33</td><td>93</td>
+<td class="up">+25.4%</td><td class="up">+38.0%</td><td class="up">+58.2%</td>
+<td><span class="tag tag-shock">外部冲击</span></td>
+<td>COVID-19→技术性衰退；美联储无限量QE→纳斯达克V型反弹最猛</td>
+</tr>
+<tr>
+<td>10</td><td>2021.11.19 – 2022.10.14</td><td>16,212.23</td><td>10,321.39</td><td class="dn">-36.3%</td><td>329</td><td>597</td>
+<td class="up">+1.8%</td><td class="up">+4.5%</td><td class="up">+10.9%</td>
+<td><span class="tag tag-policy">货币紧缩</span></td>
+<td>通胀飙升→暴力加息→科技估值重创；纳斯达克领跌（利率敏感度最高）</td>
+</tr>
+<tr>
+<td>11</td><td>2024.12 – 2025.3</td><td>20,173.37</td><td>17,260.79</td><td class="dn">-14.4%</td><td>~90</td><td>—</td>
+<td class="up">+2.4%</td><td class="up">+5.8%</td><td>—</td>
+<td><span class="tag tag-policy">政策不确定性</span></td>
+<td>特朗普关税政策重启；AI估值过高担忧；通胀反弹+降息预期推迟</td>
+</tr>
+</tbody></table>
+</div>
+
+<!-- Classification summary -->
+<h3 style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;margin:28px 0 12px;">回撤原因分类统计</h3>
+<div style="overflow-x:auto">
+<table class="drawdown-table">
+<thead><tr><th>原因类别</th><th>标普500 次数</th><th>纳斯达克 次数</th><th>平均跌幅</th><th>平均恢复天数</th><th>代表事件</th></tr></thead>
+<tbody>
+<tr><td><span class="tag tag-policy">货币紧缩/加息</span></td><td>7</td><td>4</td><td>-21%</td><td>~270</td><td>1980, 1982, 2018, 2022, 2023</td></tr>
+<tr><td><span class="tag tag-geo">地缘政治/战争</span></td><td>3</td><td>3</td><td>-43%</td><td>~600</td><td>1973石油危机, 1990海湾战争</td></tr>
+<tr><td><span class="tag tag-financial">系统性金融/债务</span></td><td>3</td><td>3</td><td>-37%</td><td>~450</td><td>2008次贷, 1998 LTCM, 2010欧债</td></tr>
+<tr><td><span class="tag tag-bubble">估值泡沫破裂</span></td><td>1</td><td>1</td><td>-64%</td><td>~3,600</td><td>2000互联网泡沫</td></tr>
+<tr><td><span class="tag tag-shock">外部冲击/技术</span></td><td>2</td><td>2</td><td>-32%</td><td>~170</td><td>1987黑色星期一, 2020 COVID</td></tr>
+</tbody></table>
+</div>
+
+<div class="index-insight" style="margin-top:20px">
+<h3>关键规律</h3>
+<ul>
+<li><strong>V型 vs L型：</strong>供给冲击型（COVID/1987）→V型反转（<6个月恢复）；金融/泡沫型（2008/2000）→L型或漫长煎熬（3-15年恢复）</li>
+<li><strong>纳斯达克跌幅放大效应：</strong>每次回撤中纳斯达克跌幅比标普500多5-25个百分点。科技股对利率和风险偏好的敏感度是蓝筹股的1.3–1.6倍</li>
+<li><strong>30/60/180天规律：</strong>非金融系统性的回撤（地缘、加息）通常在触及低点后<strong>60天内反弹8-18%、180天内反弹15-30%</strong>。2000泡沫例外——180天后继续下跌</li>
+<li><strong>最大回撤的教训：</strong>互联网泡沫（纳指-78%）、次贷危机（标普-57%）的共同点是——估值极端泡沫+系统性风险共振+政策响应迟缓</li>
+</ul>
 </div>
 </section>
 
@@ -588,6 +842,96 @@ function sp500ShowDecade(decade){
   makeTable('sp500-svg',SP500);
   makeTable('nasdaq-svg',NASDAQ);
   makeTable('hs300-svg',HS300);
+})();
+
+/* ═══ DRAWDOWN WATERFALL CHART ═══ */
+(function drawDrawdowns(){
+  var svg=document.getElementById('dd-svg');
+  if(!svg)return;
+  var W=1320,H=340,LM=280,RM=16,TM=30,BM=20,chartW=W-LM-RM,chartH=H-TM-BM;
+
+  // S&P 500 drawdown events
+  var events=[
+    {label:'1973石油危机',start:1973,end:1974,dd:-48.2,cat:'geo',spx:true,color:'#3a3a9f'},
+    {label:'1980加息',start:1980,end:1980,dd:-17.1,cat:'policy',spx:true,color:'#d2691e'},
+    {label:'1982衰退',start:1981,end:1982,dd:-27.1,cat:'policy',spx:true,color:'#d2691e'},
+    {label:'1984加息',start:1983.8,end:1984.6,dd:-14.4,cat:'policy',spx:true,color:'#d2691e'},
+    {label:'1987黑色星期一',start:1987.7,end:1987.9,dd:-33.5,cat:'shock',spx:true,color:'#1b5e20'},
+    {label:'1990海湾战争',start:1990.5,end:1990.8,dd:-19.9,cat:'geo',spx:true,color:'#3a3a9f'},
+    {label:'1998 LTCM',start:1998.6,end:1998.7,dd:-19.3,cat:'financial',spx:true,color:'#c62828'},
+    {label:'2000互联网泡沫',start:2000.2,end:2002.8,dd:-49.1,cat:'bubble',spx:true,color:'#7b2d8e'},
+    {label:'2008次贷危机',start:2007.8,end:2009.2,dd:-56.8,cat:'financial',spx:true,color:'#c62828'},
+    {label:'2010欧债',start:2010.3,end:2010.5,dd:-16.0,cat:'financial',spx:true,color:'#c62828'},
+    {label:'2011评级下调',start:2011.3,end:2011.8,dd:-19.4,cat:'policy',spx:true,color:'#d2691e'},
+    {label:'2018贸易战',start:2018.7,end:2018.9,dd:-19.8,cat:'policy',spx:true,color:'#d2691e'},
+    {label:'2020 COVID',start:2020.2,end:2020.3,dd:-33.9,cat:'shock',spx:true,color:'#1b5e20'},
+    {label:'2022通胀加息',start:2022.1,end:2022.8,dd:-25.4,cat:'policy',spx:true,color:'#d2691e'},
+    {label:'2023债市冲击',start:2023.6,end:2023.8,dd:-10.3,cat:'policy',spx:true,color:'#d2691e'},
+    // Nasdaq
+    {label:'纳指-2000泡沫',start:2000.2,end:2002.8,dd:-77.9,cat:'bubble',spx:false,color:'#7b2d8e'},
+    {label:'纳指-2022通胀',start:2022.1,end:2022.8,dd:-36.3,cat:'policy',spx:false,color:'#d2691e'},
+  ];
+
+  var svgNS='http://www.w3.org/2000/svg';
+  function el(tag,attrs){
+    var e=document.createElementNS(svgNS,tag);
+    for(var k in attrs){if(k==='text')e.textContent=attrs[k];else e.setAttribute(k,attrs[k])}
+    return e;
+  }
+  svg.innerHTML='';
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  svg.setAttribute('width','100%');svg.setAttribute('height',(H/W*100).toFixed(1));
+  var g=el('g',{});svg.appendChild(g);
+
+  // Time axis
+  var minYear=1972,maxYear=2026;
+  function xForYear(y){return LM+(y-minYear)/(maxYear-minYear)*chartW}
+  // DD axis
+  var maxDD=90,ddScale=chartH/maxDD;
+
+  // Grid lines
+  for(var i=0;i<=90;i+=20){
+    var y=TM+i*ddScale;
+    g.appendChild(el('line',{x1:LM,y1:y,x2:W-RM,y2:y,stroke:'rgba(24,20,16,0.06)','stroke-width':'1'}));
+    g.appendChild(el('text',{x:LM-6,y:y+4,'text-anchor':'end',fill:'#7b6e61','font-size':'10',text:'-'+i+'%'}));
+  }
+  // zero line
+  g.appendChild(el('line',{x1:LM,y1:TM,x2:W-RM,y2:TM,stroke:'rgba(18,18,18,0.18)','stroke-width':'1'}));
+
+  // bars — S&P 500 on top half, Nasdaq on bottom
+  for(var j=0;j<events.length;j++){
+    var ev=events[j];
+    var x1=xForYear(ev.start),x2=xForYear(ev.end);
+    var w=Math.max(4,x2-x1);
+    var h=Math.abs(ev.dd)*ddScale;
+    var y=TM; // bars grow downward from top
+    var opacity=ev.spx?0.78:0.65;
+    var barH=Math.min(h,chartH-2);
+
+    g.appendChild(el('rect',{x:x1.toFixed(1),y:y.toFixed(1),width:w.toFixed(1),height:barH.toFixed(1),
+      fill:ev.color,opacity:opacity,'stroke-width':'0',rx:'2',ry:'2'}));
+
+    // Label
+    if(w>18){
+      g.appendChild(el('text',{x:(x1+w/2).toFixed(1),y:y+barH+13,'text-anchor':'middle',fill:ev.color,
+        'font-size':'9','font-weight':'500',text:ev.label+' ('+ev.dd+'%)'}));
+    } else {
+      g.appendChild(el('text',{x:(x1+w/2).toFixed(1),y:y+barH+11,'text-anchor':'middle',fill:ev.color,
+        'font-size':'8','transform':'rotate(-70,'+(x1+w/2).toFixed(1)+','+(y+barH+11)+')',
+        text:ev.label+' '+ev.dd+'%'}));
+    }
+  }
+
+  // Legend
+  var legendItems=[
+    {label:'标普500',color:'#121212'},
+    {label:'纳斯达克',color:'#5f564d'}
+  ];
+  for(var k=0;k<2;k++){
+    var lx=W-180,ly=TM+10+k*16;
+    g.appendChild(el('rect',{x:lx,y:ly,width:10,height:10,fill:'#121212',opacity:k===0?0.78:0.45,rx:'2',ry:'2'}));
+    g.appendChild(el('text',{x:lx+14,y:ly+10,fill:'#5f564d','font-size':'11',text:legendItems[k].label}));
+  }
 })();
 </script>
 </body>
