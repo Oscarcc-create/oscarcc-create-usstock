@@ -3,188 +3,280 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>美股与A股主要指数历史年度表现分析</title>
-<meta name="description" content="标普500（1971-2025）、纳斯达克（1971-2025）、沪深300（2005-2025）历史年度涨跌幅完整数据与可视化分析。">
+<title>US Market Index Dashboard · 标普500 · 纳斯达克 · 沪深300</title>
+<meta name="description" content="标普500（1971-2025）、纳斯达克（1971-2025）、沪深300（2005-2025）历史年度涨跌幅、重大回撤事件完整数据与可视化分析。Bloomberg风格数据终端。">
 <style>
-/* ══════════════════════════════════════════════════════════
-   基于 laoqianritan-create.github.io 设计系统
-   ══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   CYBERPUNK · BLOOMBERG STYLE
+   Terminal · Data-Driven · Neon · Dark
+   ═══════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
---bg:#f4efe6; --paper:#fbf8f2; --paper-strong:#e7ded0; --ink:#121212;
---ink-soft:#5f564d; --ink-muted:#7b6e61; --line:rgba(24,20,16,0.14);
---sand:#d9cfbf; --cream:#f4efe6; --accent-soft:#d8c1a3;
---shadow:0 20px 50px rgba(18,18,18,0.06);
---shadow-hover:0 28px 60px rgba(18,18,18,0.12);
---serif:Georgia,"Times New Roman","STSong",serif;
---sans:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
---spx-blue:#1a4b8c; --spx-bg:#edf3fa;
---ndx-teal:#0d7377; --ndx-bg:#e8f7f7;
---hs3-red:#c43a31; --hs3-bg:#fef5f4;
---pos:#1a6b3c; --neg:#c0392b;
---pos-bg:rgba(26,107,60,0.08); --neg-bg:rgba(192,57,43,0.08);
+  --bg:#080c14; --bg2:#0d1220; --card:#111827;
+  --card-border:rgba(0,229,255,0.08); --card-hover:rgba(0,229,255,0.04);
+  --text:#c8d6e5; --text-dim:#6b7d95; --text-bright:#e8edf5;
+  --neon-cyan:#00e5ff; --neon-cyan-dim:rgba(0,229,255,0.15);
+  --neon-purple:#b388ff; --neon-purple-dim:rgba(179,136,255,0.15);
+  --neon-amber:#ffb74d; --neon-amber-dim:rgba(255,183,77,0.15);
+  --neon-green:#00e676; --neon-green-dim:rgba(0,230,118,0.15);
+  --neon-red:#ff5252; --neon-red-dim:rgba(255,82,82,0.15);
+  --neon-pink:#ff4081;
+  --font-mono:'JetBrains Mono','Cascadia Code','Consolas',monospace;
+  --font-sans:'Inter',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  --glow-cyan:0 0 12px rgba(0,229,255,0.3);
+  --glow-purple:0 0 12px rgba(179,136,255,0.3);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;color:var(--ink);font-family:var(--sans);font-weight:300;
-  background:radial-gradient(circle at top left,rgba(214,196,168,0.32),transparent 22%),
-  linear-gradient(180deg,#f8f4ed 0%,var(--bg) 100%)}
-a{color:inherit;text-decoration:none}a:hover{opacity:0.76}
-.shell{max-width:1360px;margin:0 auto;padding:28px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+body{margin:0;color:var(--text);font-family:var(--font-sans);font-weight:300;
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse at 20% 0%,rgba(0,229,255,0.03) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 100%,rgba(179,136,255,0.03) 0%,transparent 50%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+}
 
-/* header */
-.site-header{display:flex;justify-content:space-between;align-items:center;gap:16px;
-  margin-bottom:28px;padding:18px 24px;background:rgba(251,248,242,0.72);
-  border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(12px)}
-.site-footer{margin-top:32px;padding:16px 2px;color:var(--ink-muted);font-size:14px}
-.brand-area{display:flex;align-items:center;gap:14px}
-.brand-logos{display:flex;gap:6px;align-items:center}
+a{color:var(--neon-cyan);text-decoration:none;transition:all 0.2s}
+a:hover{text-shadow:var(--glow-cyan)}
+
+/* ── Layout ── */
+.shell{max-width:1440px;margin:0 auto;padding:24px}
+
+/* ── Keyframes ── */
+@keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glitch{0%{transform:translate(0)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,1px)}80%{transform:translate(1px,-1px)}100%{transform:translate(0)}}
+
+/* ── HEADER : Bloomberg Terminal style ── */
+.term-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;
+  background:#000;border:1px solid rgba(255,255,255,0.06);margin-bottom:24px;
+  font-family:var(--font-mono);font-size:12px;color:var(--neon-green)}
+.term-bar .term-left{display:flex;gap:20px;align-items:center}
+.term-bar .term-right{display:flex;gap:16px;align-items:center}
+.term-status{display:flex;align-items:center;gap:8px}
+.term-dot{width:8px;height:8px;border-radius:50%;background:var(--neon-green);
+  box-shadow:0 0 8px var(--neon-green);animation:pulse 2s infinite}
+.term-time{color:var(--text-dim)}
+.term-tag{color:var(--neon-cyan);padding:2px 8px;border:1px solid rgba(0,229,255,0.2);
+  background:rgba(0,229,255,0.05);font-size:11px}
+
+/* ── NAV ── */
+.site-header{display:flex;justify-content:space-between;align-items:center;gap:20px;
+  margin-bottom:24px;padding:16px 24px;background:rgba(17,24,39,0.8);
+  border:1px solid rgba(0,229,255,0.1);backdrop-filter:blur(12px)}
+.brand-area{display:flex;align-items:center;gap:16px}
 .idx-badge{display:inline-flex;align-items:center;justify-content:center;
-  width:38px;height:38px;border-radius:5px;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
-.idx-badge.spx{background:var(--spx-blue)}
-.idx-badge.ndx{background:var(--ndx-teal)}
-.idx-badge.hs3{background:var(--hs3-red);font-size:9px}
-.brand{font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;
-  letter-spacing:0.01em;color:var(--ink);animation:fadeIn 0.6s ease both}
-.nav{display:flex;flex-wrap:wrap;gap:20px;color:var(--ink-muted);font-size:13px;
-  letter-spacing:0.06em;text-transform:uppercase}
-.nav a{position:relative;transition:color 0.18s}
-.nav a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1px;
-  background:var(--ink);transition:width 0.2s ease}
-.nav a:hover{opacity:1;color:var(--ink)}.nav a:hover::after{width:100%}
+  width:36px;height:36px;border-radius:2px;font-family:var(--font-mono);font-size:10px;font-weight:700;
+  color:#000;flex-shrink:0}
+.idx-badge.spx{background:var(--neon-cyan);box-shadow:var(--glow-cyan)}
+.idx-badge.ndx{background:var(--neon-purple);box-shadow:var(--glow-purple)}
+.idx-badge.hs3{background:var(--neon-amber);box-shadow:0 0 12px rgba(255,183,77,0.3);font-size:8px}
+.brand{font-family:var(--font-mono);font-weight:300;font-size:22px;letter-spacing:0.02em;
+  color:var(--text-bright)}
+.brand span{color:var(--neon-cyan)}
+.nav{display:flex;flex-wrap:wrap;gap:16px;font-family:var(--font-mono);font-size:11px;
+  text-transform:uppercase;letter-spacing:0.08em}
+.nav a{color:var(--text-dim);padding:6px 12px;border:1px solid transparent;transition:all 0.2s}
+.nav a:hover{color:var(--neon-cyan);border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.05);text-shadow:none;opacity:1}
 
-/* hero */
-.eyebrow{margin:0 0 8px;color:var(--ink-muted);text-transform:uppercase;
-  letter-spacing:0.18em;font-size:12px;font-weight:600}
-.panel{background:rgba(251,248,242,0.82);border:1px solid var(--line);
-  box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
-.lead{max-width:760px;font-size:18px;line-height:1.75;color:#d5cabc;
-  animation:fadeUp 0.7s ease 0.25s both}
-.editorial-hero{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(320px,0.9fr);gap:0;
-  background:var(--ink);color:var(--cream);padding:0;margin-bottom:24px;overflow:hidden;position:relative}
+/* ── Panels & Cards ── */
+.panel{background:var(--card);border:1px solid var(--card-border);margin-bottom:20px;padding:24px}
+.panel-dark{background:#000;border:1px solid rgba(255,255,255,0.08)}
+.eyebrow{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;
+  letter-spacing:0.2em;color:var(--neon-cyan);margin:0 0 8px}
+
+/* ── HERO ── */
+.editorial-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(340px,0.9fr);
+  background:#000;border:1px solid rgba(0,229,255,0.12);margin-bottom:24px;overflow:hidden}
 .editorial-hero::before{content:'';position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:1}
-.editorial-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:5px;
-  background:linear-gradient(90deg,var(--spx-blue) 33.3%,var(--ndx-teal) 33.3%,var(--ndx-teal) 66.6%,var(--hs3-red) 66.6%);z-index:3}
+  background:linear-gradient(180deg,transparent 50%,rgba(0,229,255,0.02) 100%);
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;z-index:1}
+.editorial-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple),var(--neon-amber));z-index:3}
 .hero-copy,.hero-side{position:relative;z-index:2;min-width:0}
-.hero-copy{display:flex;flex-direction:column;gap:20px;padding:48px 36px 48px 40px}
-.hero-copy h1,.hero-side h2,.panel h2,.panel h3,.conclusions h2{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-0.02em}
-.hero-copy h1{margin:0;font-size:clamp(40px,5.4vw,80px);line-height:0.92;animation:fadeUp 0.7s ease 0.1s both}
-.hero-side{background:var(--paper-strong);color:var(--ink);padding:40px 32px;
-  display:flex;flex-direction:column;gap:24px;border-left:1px solid rgba(255,255,255,0.06)}
-.hero-side h2{margin:0;font-size:clamp(28px,3.3vw,44px);line-height:0.98}
-.entity-block{padding:14px 16px;border-left:3px solid;background:rgba(251,248,242,0.5)}
-.entity-block h2{font-size:22px!important;margin:0 0 6px!important}
-.entity-block p{margin:0;font-size:14px;line-height:1.6;color:var(--ink-soft)}
-.e-spx{border-left-color:var(--spx-blue)}.e-ndx{border-left-color:var(--ndx-teal)}.e-hs3{border-left-color:var(--hs3-red)}
-.hero-metrics{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;animation:fadeUp 0.7s ease 0.4s both}
-.metric-card{min-width:138px;padding:14px;background:var(--paper);color:var(--ink)}
-.metric-card strong{display:block;font-family:var(--serif);font-style:italic;font-size:42px;line-height:1}
-.metric-card span{color:var(--ink-soft);font-size:13px}
-.citation-block{background:var(--ink);color:var(--cream);padding:18px}
-.citation-block p:last-child{margin:0;font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.12}
-.tl-dr{background:rgba(251,248,242,0.12);border-left:3px solid rgba(216,193,163,0.6);
-  padding:16px 20px;font-size:0.9em;line-height:1.8;color:#c8bfb0}
-.tl-dr strong{color:var(--cream);letter-spacing:0.04em;font-weight:500}
+.hero-copy{padding:48px 40px;display:flex;flex-direction:column;gap:24px}
+.hero-copy .eyebrow{color:var(--neon-cyan)}
+.hero-copy h1{font-family:var(--font-mono);font-weight:300;font-size:clamp(36px,4.5vw,64px);
+  line-height:1.1;margin:0;color:var(--text-bright);letter-spacing:-0.02em}
+.hero-copy h1 strong{font-weight:500;color:var(--neon-cyan)}
+.hero-side{background:rgba(17,24,39,0.95);border-left:1px solid rgba(0,229,255,0.12);
+  padding:36px 28px;display:flex;flex-direction:column;gap:20px}
+.hero-side h2{font-family:var(--font-mono);font-weight:400;font-size:20px;color:var(--neon-cyan);margin:0}
+.entity-block{padding:12px 14px;border-left:3px solid var(--neon-cyan);
+  background:rgba(0,229,255,0.03)}
+.entity-block.e-ndx{border-left-color:var(--neon-purple);background:rgba(179,136,255,0.03)}
+.entity-block.e-hs3{border-left-color:var(--neon-amber);background:rgba(255,183,77,0.03)}
+.entity-block h3{font-family:var(--font-mono);font-weight:500;font-size:14px;color:var(--text-bright);margin:0 0 4px}
+.entity-block p{font-size:12px;line-height:1.6;color:var(--text-dim);margin:0}
+.hero-metrics{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+.metric-card{min-width:130px;padding:14px 16px;background:rgba(0,229,255,0.04);
+  border:1px solid rgba(0,229,255,0.12)}
+.metric-card strong{display:block;font-family:var(--font-mono);font-weight:300;font-size:36px;
+  color:var(--neon-cyan);line-height:1}
+.metric-card span{font-size:11px;color:var(--text-dim);font-family:var(--font-mono);letter-spacing:0.05em}
+.citation-block{background:rgba(255,82,82,0.06);border:1px solid rgba(255,82,82,0.15);padding:16px}
+.citation-block .eyebrow{color:var(--neon-red)}
+.citation-block p{font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--text-dim);margin:0}
+.citation-block strong{color:var(--neon-red)}
+.tl-dr{background:rgba(0,229,255,0.03);border-left:3px solid var(--neon-cyan);
+  padding:16px 20px;font-size:14px;line-height:1.8;color:var(--text-dim)}
+.tl-dr strong{color:var(--text-bright)}
 
-/* section heads */
-.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:20px;flex-wrap:wrap}
-.section-head h2{margin:0;font-size:clamp(28px,3.5vw,48px)}
-.section-subtitle{margin:0;color:var(--ink-muted);font-size:15px;max-width:500px}
-.section-stats{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.stat-item{padding:10px 14px;background:rgba(251,248,242,0.9);border:1px solid var(--line);text-align:center;min-width:68px}
-.stat-item strong{display:block;font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.1;color:var(--ink)}
-.stat-item span{font-size:11px;color:var(--ink-muted);letter-spacing:0.05em}
-.stat-item.pos{border-bottom:3px solid var(--pos)}.stat-item.pos strong{color:var(--pos)}
-.stat-item.neg{border-bottom:3px solid var(--neg)}.stat-item.neg strong{color:var(--neg)}
+/* ── Section heads ── */
+.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+.section-head h2{font-family:var(--font-mono);font-weight:300;font-size:clamp(22px,3vw,36px);
+  color:var(--text-bright);margin:0;letter-spacing:-0.01em}
+.section-head h2 em{font-style:normal;color:var(--neon-cyan)}
+.section-subtitle{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin:0;max-width:420px}
+.section-stats{display:flex;flex-wrap:wrap;gap:6px}
+.stat-item{padding:10px 12px;background:rgba(0,229,255,0.03);border:1px solid rgba(0,229,255,0.08);
+  text-align:center;min-width:64px}
+.stat-item strong{display:block;font-family:var(--font-mono);font-weight:400;font-size:22px;color:var(--neon-cyan);line-height:1.1}
+.stat-item span{font-size:10px;color:var(--text-dim);font-family:var(--font-mono);letter-spacing:0.05em}
+.stat-item.pos{border-color:rgba(0,230,118,0.3);background:rgba(0,230,118,0.04)}.stat-item.pos strong{color:var(--neon-green)}
+.stat-item.neg{border-color:rgba(255,82,82,0.3);background:rgba(255,82,82,0.04)}.stat-item.neg strong{color:var(--neon-red)}
 
-/* SVG chart container */
-.chart-wrap{position:relative;width:100%;margin:0 auto 20px;overflow-x:auto}
+/* ── SVG Charts ── */
+.chart-wrap{position:relative;width:100%;margin:0 auto 16px;overflow-x:auto}
 .chart-wrap svg{display:block;width:100%;min-width:700px}
-.chart-wrap text{font-family:var(--sans)}
 
-/* insight boxes */
-.panel h3{font-size:22px;margin:0 0 12px}
-.index-insight{background:rgba(251,248,242,0.6);border:1px solid var(--line);padding:20px 24px}
-.index-insight ul{margin:0;padding-left:20px}
-.index-insight li{margin-bottom:8px;font-size:15px;line-height:1.6;color:var(--ink-soft)}
-.index-insight li strong{color:var(--ink)}
+/* ── Insight boxes ── */
+.index-insight{background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.08);padding:18px 22px}
+.index-insight h3{font-family:var(--font-mono);font-weight:400;font-size:14px;color:var(--neon-cyan);margin:0 0 12px;text-transform:uppercase;letter-spacing:0.1em}
+.index-insight ul{margin:0;padding-left:18px}
+.index-insight li{margin-bottom:7px;font-size:13px;line-height:1.7;color:var(--text-dim)}
+.index-insight li strong{color:var(--text-bright)}
 
-/* compare */
-.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:20px}
-.compare-card{padding:18px 20px;background:rgba(251,248,242,0.7);border:1px solid var(--line)}
-.compare-card h3{margin:0 0 10px;font-size:20px}
-.compare-card p{margin:0;font-size:14px;line-height:1.7;color:var(--ink-soft)}
+/* ── Decade toggles ── */
+.decade-toggles{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px}
+.decade-toggles button{padding:5px 12px;border:1px solid rgba(0,229,255,0.15);
+  background:transparent;font-family:var(--font-mono);font-size:11px;color:var(--text-dim);
+  cursor:pointer;transition:all 0.18s;letter-spacing:0.04em}
+.decade-toggles button:hover,.decade-toggles button.active{background:rgba(0,229,255,0.08);
+  border-color:var(--neon-cyan);color:var(--neon-cyan)}
 
-/* conclusions — dark panel */
-.conclusions{background:var(--ink);color:var(--cream);border:none}
-.conclusions h2{margin:0 0 20px;font-size:clamp(28px,3.5vw,48px)}
-.conclusions ol{margin:0;padding-left:24px}
-.conclusions li{margin-bottom:14px;font-size:16px;line-height:1.75;color:#d5cabc}
-.conclusions li strong{color:var(--cream)}
-.conclusions li::marker{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--cream)}
+/* ── Data Tables ── */
+.data-table-wrap{overflow-x:auto;max-height:400px;overflow-y:auto;margin-top:12px}
+.data-table{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:11px}
+.data-table thead th{position:sticky;top:0;text-align:left;padding:10px 8px;
+  background:rgba(0,0,0,0.95);color:var(--neon-cyan);font-weight:500;font-size:10px;
+  border-bottom:2px solid rgba(0,229,255,0.2);letter-spacing:0.05em;white-space:nowrap;z-index:2}
+.data-table thead th.pct{text-align:right}
+.data-table td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text)}
+.data-table td.pct{text-align:right;font-variant-numeric:tabular-nums}
+.data-table tr:hover td{background:rgba(0,229,255,0.03)}
+.data-table .up{color:var(--neon-green)}
+.data-table .dn{color:var(--neon-red)}
 
-/* bottom / footer */
-.bottom-strip{display:flex;justify-content:space-between;align-items:center;gap:18px;
-  padding:20px 24px;margin-bottom:20px;background:var(--paper);
-  border:1px solid var(--line);box-shadow:var(--shadow)}
-.bottom-strip p{margin:0;color:var(--ink-muted);font-size:14px}
-.bottom-strip strong{color:var(--ink-soft);font-size:14px}
+/* ── Drawdown styles ── */
+.drawdown-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:20px}
+.dd-card{padding:16px;background:rgba(0,229,255,0.03);border:1px solid rgba(0,229,255,0.08)}
+.dd-card strong{display:block;font-family:var(--font-mono);font-weight:300;font-size:30px;
+  color:var(--neon-cyan);line-height:1;margin-bottom:4px}
+.dd-card span{font-size:10px;color:var(--text-dim);font-family:var(--font-mono)}
+.drawdown-viz{position:relative;height:320px;margin:16px 0;background:rgba(0,0,0,0.3);
+  border:1px solid rgba(0,229,255,0.06)}
+.drawdown-viz svg{width:100%;height:100%}
 
-/* year detail table */
-.year-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
-.year-table th{text-align:left;padding:8px 6px;border-bottom:2px solid var(--line);color:var(--ink-muted);font-weight:500;font-size:12px;letter-spacing:0.04em}
-.year-table td{padding:7px 6px;border-bottom:1px solid var(--line);color:var(--ink-soft)}
-.year-table tr:hover td{background:rgba(251,248,242,0.5)}
-.year-table .up{color:var(--pos);font-weight:500}
-.year-table .dn{color:var(--neg);font-weight:500}
-.year-table .yr{text-align:right}
-.year-table .pct{text-align:right;font-variant-numeric:tabular-nums}
+/* drawdown table */
+.dd-table{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:10.5px}
+.dd-table thead th{position:sticky;top:0;text-align:left;padding:9px 7px;
+  background:#000;color:var(--neon-cyan);font-weight:500;font-size:10px;
+  border-bottom:2px solid rgba(0,229,255,0.2);letter-spacing:0.04em;white-space:nowrap;z-index:2}
+.dd-table thead th.pct{text-align:right}
+.dd-table td{padding:7px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text-dim);line-height:1.45;vertical-align:top}
+.dd-table td.pct{text-align:right}
+.dd-table tr:hover td{background:rgba(0,229,255,0.02)}
+.dd-table .up{color:var(--neon-green)}
+.dd-table .dn{color:var(--neon-red)}
+.dd-table .tag{padding:2px 6px;border-radius:2px;font-size:9px;font-weight:500;white-space:nowrap}
+.tag-policy{background:rgba(210,105,30,0.15);color:#e8a050;border:1px solid rgba(210,105,30,0.2)}
+.tag-geo{background:rgba(100,140,255,0.15);color:#80a0ff;border:1px solid rgba(100,140,255,0.2)}
+.tag-bubble{background:rgba(180,100,255,0.15);color:#c090ff;border:1px solid rgba(180,100,255,0.2)}
+.tag-shock{background:rgba(0,230,118,0.12);color:var(--neon-green);border:1px solid rgba(0,230,118,0.2)}
+.tag-financial{background:rgba(255,82,82,0.12);color:var(--neon-red);border:1px solid rgba(255,82,82,0.2)}
 
-/* toggle decade buttons */
-.decade-toggles{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.decade-toggles button{padding:6px 14px;border:1px solid var(--line);background:var(--paper);
-  font-family:var(--sans);font-size:13px;color:var(--ink-soft);cursor:pointer;transition:all 0.18s}
-.decade-toggles button:hover,.decade-toggles button.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+/* ── Compare grid ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.compare-card{padding:18px;background:rgba(0,229,255,0.02);border:1px solid rgba(0,229,255,0.06)}
+.compare-card h3{font-family:var(--font-mono);font-weight:400;font-size:13px;color:var(--neon-cyan);margin:0 0 8px;text-transform:uppercase;letter-spacing:0.06em}
+.compare-card p{font-size:12px;line-height:1.7;color:var(--text-dim);margin:0}
+.compare-card strong{color:var(--text-bright)}
 
+/* ── Conclusions ── */
+.conclusions{background:#000;border:1px solid rgba(0,229,255,0.12)}
+.conclusions h2{font-family:var(--font-mono);font-weight:300;font-size:clamp(24px,3vw,36px);
+  color:var(--neon-cyan);margin:0 0 20px}
+.conclusions ol{margin:0;padding-left:20px}
+.conclusions li{margin-bottom:12px;font-size:14px;line-height:1.8;color:var(--text-dim)}
+.conclusions li strong{color:var(--text-bright)}
+.conclusions li::marker{color:var(--neon-cyan);font-family:var(--font-mono);font-size:14px}
+
+/* ── Bottom strip ── */
+.bottom-strip{display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:16px 20px;margin-bottom:20px;background:var(--card);
+  border:1px solid var(--card-border);font-family:var(--font-mono);font-size:11px}
+.bottom-strip p{color:var(--text-dim);margin:0}
+.bottom-strip strong{color:var(--neon-cyan)}
+
+/* ── Footer ── */
+.site-footer{padding:12px 0;color:var(--text-dim);font-family:var(--font-mono);font-size:11px}
+
+/* ── Responsive ── */
 @media(max-width:960px){
   .editorial-hero{grid-template-columns:1fr}
-  .hero-side{border-left:none;border-top:1px solid rgba(255,255,255,0.06)}
+  .hero-side{border-left:none;border-top:1px solid rgba(0,229,255,0.1)}
   .compare-grid{grid-template-columns:1fr}
   .site-header{flex-direction:column;align-items:flex-start}
-  .brand{font-size:22px}.section-head{flex-direction:column}
-  .hero-copy{padding:32px 24px}.hero-copy h1{font-size:34px}
-}
-@media(max-width:600px){
-  .shell{padding:12px}.hero-copy{padding:24px 16px}.hero-copy h1{font-size:26px}
-  .hero-side{padding:24px 16px}.metric-card strong{font-size:30px}
-  .hero-metrics{gap:8px}.metric-card{min-width:100px;padding:10px}
-  .section-stats{gap:4px}.stat-item{padding:7px 8px;min-width:56px}.stat-item strong{font-size:20px}
-  .nav{gap:10px;font-size:11px}.chart-wrap svg{min-width:500px}
+  .brand{font-size:18px}.hero-copy{padding:28px 20px}
+  .hero-copy h1{font-size:28px}
+  .term-bar{display:none}
 }
 </style>
 </head>
 <body>
-<div class="shell">
+<!-- ═══ BLOOMBERG TERMINAL BAR ═══ -->
+<div class="term-bar">
+<div class="term-left">
+<span class="term-status"><span class="term-dot"></span> LIVE</span>
+<span style="color:var(--text-dim)">|</span>
+<span>SPX <span style="color:var(--neon-cyan)">6,845.50</span> <span style="color:var(--neon-green);font-size:10px">▲16.4%</span></span>
+<span style="color:var(--text-dim)">|</span>
+<span>NDX <span style="color:var(--neon-purple)">20,173.37</span> <span style="color:var(--neon-green);font-size:10px">▲20.4%</span></span>
+<span style="color:var(--text-dim)">|</span>
+<span>CSI300 <span style="color:var(--neon-amber)">4,584.21</span> <span style="color:var(--neon-green);font-size:10px">▲20.9%</span></span>
+</div>
+<div class="term-right">
+<span class="term-tag">1971–2025</span>
+<span class="term-tag">PRICE INDEX</span>
+<span class="term-tag">ANNUAL RETURNS</span>
+<span class="term-time">DATA AS OF 2025-12-31</span>
+</div>
+</div>
+
 <!-- ═══ HEADER ═══ -->
 <header class="site-header">
 <div class="brand-area">
-<div class="brand-logos">
-<span class="idx-badge spx">S&P</span>
+<div class="brand-logos" style="display:flex;gap:6px">
+<span class="idx-badge spx">SPX</span>
 <span class="idx-badge ndx">NDX</span>
-<span class="idx-badge hs3">沪深</span>
+<span class="idx-badge hs3">CSI</span>
 </div>
-<a class="brand" href="/">美股与A股主要指数历史年度表现</a>
+<a class="brand" href="/"><span>//</span> US_INDEX_DASHBOARD</a>
 </div>
 <nav class="nav">
-<a href="#sp500">标普500</a>
-<a href="#nasdaq">纳斯达克</a>
-<a href="#hs300">沪深300</a>
-<a href="#compare">横向对比</a>
-<a href="#drawdowns">回撤分析</a>
-<a href="#conclusions">结论</a>
+<a href="#sp500">SPX</a>
+<a href="#nasdaq">NDX</a>
+<a href="#hs300">CSI300</a>
+<a href="#compare">CMP</a>
+<a href="#drawdowns">DD</a>
+<a href="#conclusions">SUM</a>
 </nav>
 </header>
 
@@ -192,39 +284,39 @@ a{color:inherit;text-decoration:none}a:hover{opacity:0.76}
 <!-- ═══ HERO ═══ -->
 <section class="editorial-hero">
 <div class="hero-copy">
-<p class="eyebrow">For Investors · 历史不会重复，但会押韵</p>
-<h1>标普500 · 纳斯达克<br>沪深300 历史年度表现</h1>
-<p class="lead tl-dr"><strong>核心结论：</strong>1971–2025 共55年间，标普500上涨年份占76%，纳斯达克上涨占75%，沪深300上涨占62%。美股"慢牛快熊"，急跌后总能创新高；A股波动极大，±50%年份并不罕见。理解每个市场的波动特征，比预测涨跌更重要。</p>
+<p class="eyebrow">▸ ANNUAL RETURNS ANALYSIS</p>
+<h1>标普500 / 纳斯达克<br><strong>沪深300</strong> 年度表现</h1>
+<p class="tl-dr"><strong>> 核心结论：</strong>1971–2025 共55年间，标普500上涨年份占76%，纳斯达克占75%，沪深300占62%。美股"慢牛快熊"急跌后总能创新高；A股波动极大。理解市场特征 >> 预测涨跌。</p>
 <div class="hero-metrics">
-<div class="metric-card"><strong>55年</strong><span>美股数据跨度</span></div>
-<div class="metric-card"><strong>21年</strong><span>沪深300数据跨度</span></div>
-<div class="metric-card"><strong>76%</strong><span>标普500上涨年份</span></div>
-<div class="metric-card"><strong>24%</strong><span>标普500下跌年份</span></div>
+<div class="metric-card"><strong>55y</strong><span>美股数据跨度</span></div>
+<div class="metric-card"><strong>21y</strong><span>沪深300跨度</span></div>
+<div class="metric-card"><strong>76%</strong><span>SPX上涨年份</span></div>
+<div class="metric-card"><strong>75%</strong><span>NDX上涨年份</span></div>
 </div>
 </div>
 <aside class="hero-side">
-<p class="eyebrow">三大指数概况</p>
-<div class="entity-block e-spx"><h2>标普500</h2><p>美国500家大型上市公司市值加权指数。1971–2025价格回报年化约7.8%，含分红约10.2%。1974年最差(-29.7%)，1995年最好(+34.1%)。</p></div>
-<div class="entity-block e-ndx"><h2>纳斯达克综合指数</h2><p>纳斯达克全市场指数，科技股权重极高。涨时更猛、跌时更深。1971年成立至今55年，1999年暴涨+85.6%，2008年暴跌-40.5%。</p></div>
-<div class="entity-block e-hs3"><h2>沪深300</h2><p>沪深两市最大300只A股。牛短熊长，2007年暴涨+161.5%，2008年暴跌-65.9%，波动特征与美股截然不同。全收益年化约9.1%。</p></div>
-<div class="citation-block"><p class="eyebrow">数据说明</p><p>所有数据为价格指数年度涨跌幅（不含分红再投资）。数据来源：Macrotrends / Yahoo Finance / 中证指数。</p></div>
+<p class="eyebrow" style="color:var(--neon-cyan)">▸ INDEX OVERVIEW</p>
+<div class="entity-block"><h3>SPX · 标普500</h3><p>美国500家大型企业市值加权。1971-2025年化+7.8%（价格），含分红~+10.2%。全球最重要权益基准。</p></div>
+<div class="entity-block e-ndx"><h3>NDX · 纳斯达克综合</h3><p>纳斯达克全市场指数，科技权重极高。弹性为SPX的1.5×——涨更猛跌更深。55年年化+8.6%。</p></div>
+<div class="entity-block e-hs3"><h3>CSI300 · 沪深300</h3><p>沪深最大300只A股。波动极大（±50%常有）。全收益年化+9.1%，但牛短熊长特征显著。</p></div>
+<div class="citation-block"><p class="eyebrow">▸ DISCLAIMER</p><p><strong>价格指数口径（不含分红）。</strong> 数据源：Macrotrends / Yahoo Finance / 中证指数。历史表现不代表未来。</p></div>
 </aside>
 </section>
 
 <!-- ═══ S&P 500 ═══ -->
-<section class="panel" id="sp500">
+<section class="panel" id="sp500" style="animation:fadeUp 0.5s ease both">
 <div class="section-head">
-<div><p class="eyebrow">美股 · 大盘基准 · 1971–2025</p><h2>标普500 历年表现</h2></div>
+<div><p class="eyebrow">▸ SPX · BENCHMARK</p><h2><em>标普500</em> 历年表现 [1971–2025]</h2></div>
 <div class="section-stats">
-<div class="stat-item"><strong>+7.8%</strong><span>价格指数年化</span></div>
-<div class="stat-item"><strong>~10%</strong><span>含分红年化</span></div>
-<div class="stat-item"><strong>76%</strong><span>上涨年份</span></div>
-<div class="stat-item pos">42年↑</div>
-<div class="stat-item neg">13年↓</div>
+<div class="stat-item"><strong>+7.8%</strong><span>PRICE CAGR</span></div>
+<div class="stat-item"><strong>~10%</strong><span>W/ DIV</span></div>
+<div class="stat-item"><strong>76%</strong><span>UP YEARS</span></div>
+<div class="stat-item pos">42↑</div>
+<div class="stat-item neg">13↓</div>
 </div>
 </div>
 <div class="decade-toggles">
-<button class="active" onclick="sp500ShowDecade('all')">全部</button>
+<button class="active" onclick="sp500ShowDecade('all')">ALL</button>
 <button onclick="sp500ShowDecade('1970')">1970s</button>
 <button onclick="sp500ShowDecade('1980')">1980s</button>
 <button onclick="sp500ShowDecade('1990')">1990s</button>
@@ -234,60 +326,57 @@ a{color:inherit;text-decoration:none}a:hover{opacity:0.76}
 </div>
 <div class="chart-wrap"><svg id="sp500-svg"></svg></div>
 <div class="index-insight">
-<h3>关键观察</h3>
+<h3>▸ KEY OBSERVATIONS</h3>
 <ul>
-<li><strong>三次严重回撤：</strong>1973–1974（石油危机连跌-17%/-30%）、2000–2002（互联网泡沫连跌三年累跌-38%）、2008（金融危机-38.5%）、2022（加息-19.4%）</li>
-<li><strong>最长连胜：</strong>1982–1989连涨8年；2003–2007连涨5年</li>
-<li><strong>规律：</strong>每次大跌后次年必然反弹——55年间未有连续两年出现超10%跌幅的情况（除科技泡沫特殊时期）。"牛长熊短"特征鲜明</li>
-<li><strong>温和为主：</strong>约60%年份涨跌幅在-5%~+25%之间，极端年份（±30%以上）仅出现过6次</li>
+<li><strong>三次>30%回撤：</strong>1973-74(石油-48%) · 2000-02(互联网泡沫-49%) · 2008(次贷-57%)</li>
+<li><strong>最长连胜：</strong>1982-89连涨8年（超级牛市）· 2003-07连涨5年</li>
+<li><strong>牛长熊短：</strong>约60%年份在-5%~+25%区间——典型的温和慢牛</li>
 </ul>
 </div>
 </section>
 
 <!-- ═══ NASDAQ ═══ -->
-<section class="panel" id="nasdaq">
+<section class="panel" id="nasdaq" style="animation:fadeUp 0.5s ease 0.1s both">
 <div class="section-head">
-<div><p class="eyebrow">美股 · 科技成长 · 1971–2025</p><h2>纳斯达克综合指数 历年表现</h2></div>
+<div><p class="eyebrow">▸ NDX · TECH-GROWTH</p><h2><em>纳斯达克</em> 历年表现 [1971–2025]</h2></div>
 <div class="section-stats">
-<div class="stat-item"><strong>+8.6%</strong><span>价格指数年化</span></div>
-<div class="stat-item"><strong>±28%</strong><span>平均绝对涨跌</span></div>
-<div class="stat-item"><strong>75%</strong><span>上涨年份</span></div>
-<div class="stat-item pos">41年↑</div>
-<div class="stat-item neg">14年↓</div>
+<div class="stat-item"><strong>+8.6%</strong><span>PRICE CAGR</span></div>
+<div class="stat-item"><strong>±21%</strong><span>STD DEV</span></div>
+<div class="stat-item"><strong>75%</strong><span>UP YEARS</span></div>
+<div class="stat-item pos">41↑</div>
+<div class="stat-item neg">14↓</div>
 </div>
 </div>
 <div class="chart-wrap"><svg id="nasdaq-svg"></svg></div>
 <div class="index-insight">
-<h3>关键观察</h3>
+<h3>▸ KEY OBSERVATIONS</h3>
 <ul>
-<li><strong>极致波动：</strong>55年间涨跌幅标准差约21%，是标普500（13%）的1.6倍。最好+85.6%（1999），最差-40.5%（2008）</li>
-<li><strong>泡沫与复苏：</strong>2000年互联网泡沫破裂，从高点跌去78%，直到2015年才收复失地——整整15年</li>
-<li><strong>2019–2025狂飙：</strong>7年间6年上涨，仅2022年下跌，累计涨幅超过250%。AI浪潮接力互联网革命</li>
-<li><strong>盈亏同源：</strong>如果你能承受纳斯达克的波动，长期回报优于标普500；如果不能，它会在最糟时刻把你甩下车</li>
+<li><strong>极致波动：</strong>最好+85.6%(1999) · 最差-40.5%(2008) · 标准差为SPX的1.6倍</li>
+<li><strong>15年水下：</strong>2000年泡沫顶点→2015年才收复——互联网泡沫创伤之深</li>
+<li><strong>AI驱动：</strong>2019-2025七年间仅一年下跌（2022）· 累计涨幅>250%</li>
 </ul>
 </div>
 </section>
 
 <!-- ═══ 沪深300 ═══ -->
-<section class="panel" id="hs300">
+<section class="panel" id="hs300" style="animation:fadeUp 0.5s ease 0.2s both">
 <div class="section-head">
-<div><p class="eyebrow">A股 · 核心资产 · 2005–2025</p><h2>沪深300 历年表现</h2></div>
+<div><p class="eyebrow">▸ CSI300 · CHINA A-SHARES</p><h2><em>沪深300</em> 历年表现 [2005–2025]</h2></div>
 <div class="section-stats">
-<div class="stat-item"><strong>+7.1%</strong><span>价格指数年化</span></div>
-<div class="stat-item"><strong>+9.1%</strong><span>全收益年化</span></div>
-<div class="stat-item"><strong>62%</strong><span>上涨年份</span></div>
-<div class="stat-item pos">13年↑</div>
-<div class="stat-item neg">8年↓</div>
+<div class="stat-item"><strong>+7.1%</strong><span>PRICE CAGR</span></div>
+<div class="stat-item"><strong>+9.1%</strong><span>TOTAL RETURN</span></div>
+<div class="stat-item"><strong>62%</strong><span>UP YEARS</span></div>
+<div class="stat-item pos">13↑</div>
+<div class="stat-item neg">8↓</div>
 </div>
 </div>
 <div class="chart-wrap"><svg id="hs300-svg"></svg></div>
 <div class="index-insight">
-<h3>关键观察</h3>
+<h3>▸ KEY OBSERVATIONS</h3>
 <ul>
-<li><strong>涨幅集中：</strong>2006(+120.6%)和2007(+161.5%)两年贡献了绝大部分历史收益。错过这两年，20年年化收益锐减</li>
-<li><strong>牛短熊长：</strong>大涨集中在几个年份（2006–2007、2009、2014、2019–2020），其余多为震荡或阴跌</li>
-<li><strong>连跌三年：</strong>2021–2023连续三年下跌，累计-34%。这在美股极为罕见</li>
-<li><strong>分红不可忽视：</strong>全收益指数比价格指数年化高出2个百分点，20年复利差异超过150%</li>
+<li><strong>涨幅集中：</strong>2006(+120.6%)和2007(+161.5%)贡献了绝大部分历史收益</li>
+<li><strong>牛短熊长：</strong>大涨集中在少数年份· 2021-23连跌三年(-34%)· 美股几乎不出现</li>
+<li><strong>分红不可忽视：</strong>全收益比价格年化高2pp· 20年复利差异>150%</li>
 </ul>
 </div>
 </section>
@@ -295,644 +384,363 @@ a{color:inherit;text-decoration:none}a:hover{opacity:0.76}
 <!-- ═══ COMPARE ═══ -->
 <section class="panel" id="compare">
 <div class="section-head">
-<div><p class="eyebrow">横向对比 · 2005–2025</p><h2>三大指数同框比较</h2></div>
-<p class="section-subtitle">统一口径（价格指数），覆盖三大指数共存的21年完整数据</p>
+<div><p class="eyebrow">▸ CROSS-COMPARISON</p><h2><em>三大指数</em> 同框 [2005–2025]</h2></div>
+<p class="section-subtitle">统一价格指数口径，覆盖三大指数共存完整数据</p>
 </div>
-<div class="chart-wrap" style="max-height:500px;overflow-y:auto"><svg id="compare-svg"></svg></div>
+<div class="chart-wrap" style="max-height:460px;overflow-y:auto"><svg id="compare-svg"></svg></div>
 <div class="compare-grid">
-<div class="compare-card">
-<h3>标普500 vs 纳斯达克</h3>
-<p>两者高度正相关（同年同向概率~91%），纳斯达克弹性约为标普500的<strong>1.5–1.8倍</strong>。涨时更涨、跌时更跌，科技行业权重差异是唯一解释。</p>
-</div>
-<div class="compare-card">
-<h3>美股 vs A股</h3>
-<p>沪深300与美股年涨跌幅相关性极低（~0.15）。2022年全球紧缩导致三者齐跌，但2023年标普+24%、纳斯达克+43%而沪深300续跌-11%。<strong>中美市场驱动逻辑截然不同</strong>。</p>
-</div>
-<div class="compare-card">
-<h3>波动排行</h3>
-<p><strong>沪深300（标准差31%）≫ 纳斯达克（21%）＞ 标普500（13%）</strong><br>
-沪深300的±50%年份几乎每3–5年出现一次，而标普500±30%以上55年只出现6次。A股投资者需要更强的心理承受力。</p>
-</div>
+<div class="compare-card"><h3>SPX vs NDX</h3><p>同年同向概率~91% · 纳斯达克弹性为SPX的<strong>1.5-1.8×</strong> · 科技权重差异是唯一解释</p></div>
+<div class="compare-card"><h3>US vs CN</h3><p>相关性<strong>~0.15</strong> · 2022年同步下跌但2023年SPX+24%/NDX+43%而CSI300续跌-11% · 驱动逻辑截然不同</p></div>
+<div class="compare-card"><h3>波动排行</h3><p>CSI300(std 31%) ≫ NDX(21%) > SPX(13%) · A股±50%每3-5年一次 · SPX±30%以上55年仅6次</p></div>
 </div>
 </section>
 
-<!-- ═══ DRAWDOWN ANALYSIS ═══ -->
+<!-- ═══ DRAWDOWNS ═══ -->
 <section class="panel" id="drawdowns">
 <div class="section-head">
-<div><p class="eyebrow">回撤分析 · 重大事件 · 1973–2025</p><h2>标普500 & 纳斯达克 重大回撤事件</h2></div>
-<p class="section-subtitle">统计>10%回撤的完整清单，含原因归类、回撤幅度、恢复时间与回撤后30/60/180天表现</p>
+<div><p class="eyebrow">▸ DRAWDOWN ANALYSIS</p><h2><em>重大回撤</em> 事件清单 [1973–2025]</h2></div>
+<p class="section-subtitle">标普500（>10%回撤）& 纳斯达克（>15%回撤）完整清单 · 含原因归类与回撤后表现</p>
 </div>
-
-<style>
-.drawdown-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:16px}
-.drawdown-table th{text-align:left;padding:10px 7px;border-bottom:2px solid var(--line);color:var(--ink-muted);font-weight:600;font-size:11px;letter-spacing:0.04em;background:rgba(251,248,242,0.6);position:sticky;top:0;white-space:nowrap}
-.drawdown-table td{padding:8px 7px;border-bottom:1px solid var(--line);color:var(--ink-soft);line-height:1.45}
-.drawdown-table tr:hover td{background:rgba(251,248,242,0.5)}
-.drawdown-table .tag{padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;white-space:nowrap}
-.tag-recession{background:#fef0f0;color:#c0392b}
-.tag-policy{background:#fdf3e0;color:#d2691e}
-.tag-geo{background:#f0f0fe;color:#3a3a9f}
-.tag-bubble{background:#f3e8ff;color:#7b2d8e}
-.tag-shock{background:#e8f5e9;color:#1b5e20}
-.tag-financial{background:#fff3e0;color:#c62828}
-.drawdown-viz{position:relative;height:340px;margin:20px 0;background:rgba(251,248,242,0.4);border:1px solid var(--line)}
-.drawdown-viz svg{width:100%;height:100%}
-.drawdown-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
-.dd-card{padding:16px;background:rgba(251,248,242,0.6);border:1px solid var(--line)}
-.dd-card strong{display:block;font-family:var(--serif);font-style:italic;font-size:32px;line-height:1;margin-bottom:4px}
-.dd-card span{font-size:12px;color:var(--ink-muted)}
-@media(max-width:900px){.drawdown-table{font-size:10px}.drawdown-table th,.drawdown-table td{padding:6px 4px}}
-</style>
 
 <div class="drawdown-summary">
-<div class="dd-card"><strong>16</strong><span>标普500 ≥10%回撤事件<br>(1973–2025)</span></div>
-<div class="dd-card"><strong>12</strong><span>纳斯达克 ≥15%回撤事件<br>(1973–2025)</span></div>
-<div class="dd-card"><strong>-57%</strong><span>最深回撤（2008金融危机）</span></div>
-<div class="dd-card"><strong>-78%</strong><span>纳斯达克最深回撤（2000泡沫）</span></div>
-<div class="dd-card"><strong>33天</strong><span>最短回撤（2020新冠疫情）</span></div>
-<div class="dd-card"><strong>929天</strong><span>最长回撤（2000互联网泡沫）</span></div>
+<div class="dd-card"><strong>16</strong><span>SPX ≥10% DD EVENTS</span></div>
+<div class="dd-card"><strong>12</strong><span>NDX ≥15% DD EVENTS</span></div>
+<div class="dd-card" style="border-color:rgba(255,82,82,0.2)"><strong>-57%</strong><span>SPX MAX DD (2008)</span></div>
+<div class="dd-card" style="border-color:rgba(255,82,82,0.2)"><strong>-78%</strong><span>NDX MAX DD (2000)</span></div>
+<div class="dd-card"><strong>33D</strong><span>FASTEST DD (2020)</span></div>
+<div class="dd-card"><strong>929D</strong><span>LONGEST DD (2000)</span></div>
 </div>
 
-<!-- Drawdown waterfall SVG -->
-<div class="drawdown-viz">
-<svg id="dd-svg"></svg>
-</div>
+<!-- Waterfall viz -->
+<div class="drawdown-viz"><svg id="dd-svg"></svg></div>
 
-<!-- S&P 500 drawdown table -->
-<h3 style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;margin:0 0 8px;">标普500 重大回撤一览（>10%）</h3>
-<div style="overflow-x:auto">
-<table class="drawdown-table">
+<!-- S&P 500 DD Table -->
+<h3 style="font-family:var(--font-mono);font-weight:400;font-size:16px;color:var(--neon-cyan);margin:24px 0 8px">▸ SPX · 标普500 重大回撤 (>10%)</h3>
+<div class="data-table-wrap">
+<table class="dd-table">
 <thead><tr>
-<th>#</th><th>时间段</th><th>高点</th><th>低点</th><th>跌幅</th><th>创新低<br>天数</th><th>再创新高<br>天数</th>
-<th>30天后</th><th>60天后</th><th>180天后</th><th>原因归类</th><th>详细原因</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>1</td><td>1973.1.11 – 1974.10.3</td><td>120.24</td><td>62.28</td><td class="dn">-48.2%</td><td>630</td><td>1,526</td>
-<td class="dn">-2.1%</td><td class="up">+3.8%</td><td class="up">+31.5%</td>
-<td><span class="tag tag-geo">地缘政治</span></td>
-<td>第四次中东战争→OPEC石油禁运；油价×3；美国通胀>12%；滞胀+经济衰退</td>
-</tr>
-<tr>
-<td>2</td><td>1980.2.13 – 1980.3.27</td><td>118.44</td><td>98.22</td><td class="dn">-17.1%</td><td>43</td><td>168</td>
-<td class="up">+5.2%</td><td class="up">+12.8%</td><td class="up">+27.3%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>沃尔克加息遏制通胀；联邦基金利率升至~20%；经济衰退担忧</td>
-</tr>
-<tr>
-<td>3</td><td>1980.11.28 – 1982.8.12</td><td>140.52</td><td>102.42</td><td class="dn">-27.1%</td><td>622</td><td>456</td>
-<td class="up">+1.5%</td><td class="up">+8.9%</td><td class="up">+36.0%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>沃尔克继续激进加息；联邦基金利率20%→深度衰退；企业盈利大幅下降；失业率>10%</td>
-</tr>
-<tr>
-<td>4</td><td>1983.10.10 – 1984.7.24</td><td>172.65</td><td>147.82</td><td class="dn">-14.4%</td><td>288</td><td>541</td>
-<td class="up">+3.2%</td><td class="up">+7.1%</td><td class="up">+22.6%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>1984年升息周期；新兴市场债务危机（墨西哥违约）</td>
-</tr>
-<tr>
-<td>5</td><td>1987.8.25 – 1987.12.4</td><td>336.77</td><td>223.92</td><td class="dn">-33.5%</td><td>101</td><td>549</td>
-<td class="up">+12.8%</td><td class="up">+18.2%</td><td class="up">+26.4%</td>
-<td><span class="tag tag-shock">技术冲击</span></td>
-<td>10/19"黑色星期一"单日暴跌-22.6%；程序化交易+组合保险引发自动踩踏式抛售；美元贬值+贸易赤字</td>
-</tr>
-<tr>
-<td>6</td><td>1990.7.16 – 1990.10.11</td><td>368.95</td><td>295.46</td><td class="dn">-19.9%</td><td>87</td><td>178</td>
-<td class="up">+2.6%</td><td class="up">+7.8%</td><td class="up">+18.5%</td>
-<td><span class="tag tag-geo">地缘政治</span></td>
-<td>伊拉克入侵科威特→海湾战争→油价翻倍；美国温和衰退；储贷危机</td>
-</tr>
-<tr>
-<td>7</td><td>1998.7.17 – 1998.8.31</td><td>1,186.75</td><td>957.28</td><td class="dn">-19.3%</td><td>45</td><td>95</td>
-<td class="up">+8.4%</td><td class="up">+19.2%</td><td class="up">+24.7%</td>
-<td><span class="tag tag-financial">金融传染</span></td>
-<td>亚洲金融危机→俄罗斯债务违约→LTCM对冲基金几乎崩盘；美联储紧急降息救市</td>
-</tr>
-<tr>
-<td>8</td><td>1999.7.16 – 1999.10.15</td><td>1,418.78</td><td>1,247.41</td><td class="dn">-12.1%</td><td>91</td><td>84</td>
-<td class="up">+6.3%</td><td class="up">+10.1%</td><td class="up">+15.8%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>美联储加息周期（1999年6月-11月加息3次）；科技股估值过高担忧；Y2K恐惧</td>
-</tr>
-<tr>
-<td>9</td><td>2000.3.24 – 2002.10.9</td><td>1,527.46</td><td>776.76</td><td class="dn">-49.1%</td><td>929</td><td>1,812</td>
-<td class="up">+1.3%</td><td class="up">+6.7%</td><td class="dn">-11.3%</td>
-<td><span class="tag tag-bubble">估值泡沫</span></td>
-<td>互联网估值泡沫破裂；99-00年6次加息；2001年911恐袭；安然/世通财务丑闻</td>
-</tr>
-<tr>
-<td>10</td><td>2007.10.9 – 2009.3.9</td><td>1,565.15</td><td>676.53</td><td class="dn">-56.8%</td><td>517</td><td>1,472</td>
-<td class="up">+12.3%</td><td class="up">+26.5%</td><td class="up">+45.8%</td>
-<td><span class="tag tag-financial">系统性金融</span></td>
-<td>次贷危机→雷曼兄弟破产（2008.9）→MBS/CDO崩盘→全球信贷冻结→政府救市</td>
-</tr>
-<tr>
-<td>11</td><td>2010.4.23 – 2010.7.2</td><td>1,217.28</td><td>1,022.58</td><td class="dn">-16.0%</td><td>70</td><td>165</td>
-<td class="up">+7.3%</td><td class="up">+12.4%</td><td class="up">+21.2%</td>
-<td><span class="tag tag-financial">金融传染</span></td>
-<td>欧债危机（希腊）→欧洲主权债务恐慌；Flash Crash闪电崩盘（5/6 -9%）</td>
-</tr>
-<tr>
-<td>12</td><td>2011.4.29 – 2011.10.3</td><td>1,363.61</td><td>1,099.23</td><td class="dn">-19.4%</td><td>157</td><td>132</td>
-<td class="up">+10.8%</td><td class="up">+15.2%</td><td class="up">+22.3%</td>
-<td><span class="tag tag-policy">政治+信用</span></td>
-<td>美国债务上限危机→标普史上首次下调美国AAA评级；欧债危机升级（意大利/西班牙）</td>
-</tr>
-<tr>
-<td>13</td><td>2018.9.20 – 2018.12.24</td><td>2,930.75</td><td>2,351.10</td><td class="dn">-19.8%</td><td>95</td><td>98</td>
-<td class="up">+7.9%</td><td class="up">+14.1%</td><td class="up">+25.0%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>美联储缩表+加息；中美贸易战升级；全球经济放缓担忧；Q4流动性枯竭</td>
-</tr>
-<tr>
-<td>14</td><td>2020.2.19 – 2020.3.23</td><td>3,386.15</td><td>2,237.40</td><td class="dn">-33.9%</td><td>33</td><td>142</td>
-<td class="up">+27.5%</td><td class="up">+35.2%</td><td class="up">+52.4%</td>
-<td><span class="tag tag-shock">外部冲击</span></td>
-<td>COVID-19全球疫情→封城→经济冻结→4次熔断；美联储无限量QE+零利率</td>
-</tr>
-<tr>
-<td>15</td><td>2022.1.3 – 2022.10.12</td><td>4,796.56</td><td>3,577.03</td><td class="dn">-25.4%</td><td>282</td><td>477</td>
-<td class="up">+2.1%</td><td class="up">+6.7%</td><td class="up">+14.3%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>CPI 9.1%→40年新高；美联储7次加息（0→4.5%）+缩表；俄乌冲突推高能源/粮食价格</td>
-</tr>
-<tr>
-<td>16</td><td>2023.7.31 – 2023.10.27</td><td>4,588.96</td><td>4,117.37</td><td class="dn">-10.3%</td><td>88</td><td>56</td>
-<td class="up">+9.1%</td><td class="up">+15.5%</td><td class="up">+27.6%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>美债收益率飙升（10Y→5%）+地缘紧张（巴以冲突）；市场消化"higher for longer"预期</td>
-</tr>
+<th>#</th><th>TIME RANGE</th><th>HIGH</th><th>LOW</th><th class="pct">DD%</th><th class="pct">NEW LOW DAYS</th><th class="pct">NEW HIGH DAYS</th>
+<th class="pct">30D</th><th class="pct">60D</th><th class="pct">180D</th><th>CAUSE</th><th>DETAIL</th></tr></thead><tbody>
+<tr><td>1</td><td>1973-01-11 → 1974-10-03</td><td>120.24</td><td>62.28</td><td class="pct dn">-48.2%</td><td class="pct">630</td><td class="pct">1,526</td><td class="pct dn">-2.1%</td><td class="pct up">+3.8%</td><td class="pct up">+31.5%</td><td><span class="tag tag-geo">地缘</span></td><td>OPEC石油禁运·油价×3·通胀>12%·滞胀+衰退</td></tr>
+<tr><td>2</td><td>1980-02-13 → 1980-03-27</td><td>118.44</td><td>98.22</td><td class="pct dn">-17.1%</td><td class="pct">43</td><td class="pct">168</td><td class="pct up">+5.2%</td><td class="pct up">+12.8%</td><td class="pct up">+27.3%</td><td><span class="tag tag-policy">政策</span></td><td>沃尔克加息·联邦基金利率→20%·衰退担忧</td></tr>
+<tr><td>3</td><td>1980-11-28 → 1982-08-12</td><td>140.52</td><td>102.42</td><td class="pct dn">-27.1%</td><td class="pct">622</td><td class="pct">456</td><td class="pct up">+1.5%</td><td class="pct up">+8.9%</td><td class="pct up">+36.0%</td><td><span class="tag tag-policy">政策</span></td><td>沃尔克继续加息·深度衰退·失业率>10%</td></tr>
+<tr><td>4</td><td>1983-10-10 → 1984-07-24</td><td>172.65</td><td>147.82</td><td class="pct dn">-14.4%</td><td class="pct">288</td><td class="pct">541</td><td class="pct up">+3.2%</td><td class="pct up">+7.1%</td><td class="pct up">+22.6%</td><td><span class="tag tag-policy">政策</span></td><td>1984升息周期·墨西哥债务违约</td></tr>
+<tr><td>5</td><td>1987-08-25 → 1987-12-04</td><td>336.77</td><td>223.92</td><td class="pct dn">-33.5%</td><td class="pct">101</td><td class="pct">549</td><td class="pct up">+12.8%</td><td class="pct up">+18.2%</td><td class="pct up">+26.4%</td><td><span class="tag tag-shock">冲击</span></td><td>黑色星期一10/19 -22.6%·程序化交易踩踏</td></tr>
+<tr><td>6</td><td>1990-07-16 → 1990-10-11</td><td>368.95</td><td>295.46</td><td class="pct dn">-19.9%</td><td class="pct">87</td><td class="pct">178</td><td class="pct up">+2.6%</td><td class="pct up">+7.8%</td><td class="pct up">+18.5%</td><td><span class="tag tag-geo">地缘</span></td><td>伊拉克入侵科威特·海湾战争·油价翻倍</td></tr>
+<tr><td>7</td><td>1998-07-17 → 1998-08-31</td><td>1,186.75</td><td>957.28</td><td class="pct dn">-19.3%</td><td class="pct">45</td><td class="pct">95</td><td class="pct up">+8.4%</td><td class="pct up">+19.2%</td><td class="pct up">+24.7%</td><td><span class="tag tag-financial">金融</span></td><td>亚洲危机→俄违约→LTCM崩盘·联储紧急降息</td></tr>
+<tr><td>8</td><td>1999-07-16 → 1999-10-15</td><td>1,418.78</td><td>1,247.41</td><td class="pct dn">-12.1%</td><td class="pct">91</td><td class="pct">84</td><td class="pct up">+6.3%</td><td class="pct up">+10.1%</td><td class="pct up">+15.8%</td><td><span class="tag tag-policy">政策</span></td><td>加息周期·科技股估值过高·Y2K恐惧</td></tr>
+<tr><td>9</td><td>2000-03-24 → 2002-10-09</td><td>1,527.46</td><td>776.76</td><td class="pct dn">-49.1%</td><td class="pct">929</td><td class="pct">1,812</td><td class="pct up">+1.3%</td><td class="pct up">+6.7%</td><td class="pct dn">-11.3%</td><td><span class="tag tag-bubble">泡沫</span></td><td>互联网估值泡沫·911恐袭·安然/世通丑闻</td></tr>
+<tr><td>10</td><td>2007-10-09 → 2009-03-09</td><td>1,565.15</td><td>676.53</td><td class="pct dn">-56.8%</td><td class="pct">517</td><td class="pct">1,472</td><td class="pct up">+12.3%</td><td class="pct up">+26.5%</td><td class="pct up">+45.8%</td><td><span class="tag tag-financial">金融</span></td><td>次贷危机·雷曼破产·MBS/CDO崩盘·全球信贷冻结</td></tr>
+<tr><td>11</td><td>2010-04-23 → 2010-07-02</td><td>1,217.28</td><td>1,022.58</td><td class="pct dn">-16.0%</td><td class="pct">70</td><td class="pct">165</td><td class="pct up">+7.3%</td><td class="pct up">+12.4%</td><td class="pct up">+21.2%</td><td><span class="tag tag-financial">金融</span></td><td>欧债危机(希腊)·Flash Crash闪电崩盘</td></tr>
+<tr><td>12</td><td>2011-04-29 → 2011-10-03</td><td>1,363.61</td><td>1,099.23</td><td class="pct dn">-19.4%</td><td class="pct">157</td><td class="pct">132</td><td class="pct up">+10.8%</td><td class="pct up">+15.2%</td><td class="pct up">+22.3%</td><td><span class="tag tag-policy">政治</span></td><td>美国债务上限危机·标普首降美AAA评级</td></tr>
+<tr><td>13</td><td>2018-09-20 → 2018-12-24</td><td>2,930.75</td><td>2,351.10</td><td class="pct dn">-19.8%</td><td class="pct">95</td><td class="pct">98</td><td class="pct up">+7.9%</td><td class="pct up">+14.1%</td><td class="pct up">+25.0%</td><td><span class="tag tag-policy">政策</span></td><td>美联储缩表+加息·中美贸易战升级</td></tr>
+<tr><td>14</td><td>2020-02-19 → 2020-03-23</td><td>3,386.15</td><td>2,237.40</td><td class="pct dn">-33.9%</td><td class="pct">33</td><td class="pct">142</td><td class="pct up">+27.5%</td><td class="pct up">+35.2%</td><td class="pct up">+52.4%</td><td><span class="tag tag-shock">冲击</span></td><td>COVID-19·全球封城·4次熔断·无限量QE</td></tr>
+<tr><td>15</td><td>2022-01-03 → 2022-10-12</td><td>4,796.56</td><td>3,577.03</td><td class="pct dn">-25.4%</td><td class="pct">282</td><td class="pct">477</td><td class="pct up">+2.1%</td><td class="pct up">+6.7%</td><td class="pct up">+14.3%</td><td><span class="tag tag-policy">政策</span></td><td>CPI 9.1%·美联储7次加息+缩表·俄乌冲突</td></tr>
+<tr><td>16</td><td>2023-07-31 → 2023-10-27</td><td>4,588.96</td><td>4,117.37</td><td class="pct dn">-10.3%</td><td class="pct">88</td><td class="pct">56</td><td class="pct up">+9.1%</td><td class="pct up">+15.5%</td><td class="pct up">+27.6%</td><td><span class="tag tag-policy">政策</span></td><td>国债收益率飙升(10Y→5%)·巴以冲突·higher for longer</td></tr>
 </tbody></table>
 </div>
 
-<!-- Nasdaq drawdown table -->
-<h3 style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;margin:28px 0 8px;">纳斯达克综合指数 重大回撤一览（>15%）</h3>
-<div style="overflow-x:auto">
-<table class="drawdown-table">
+<!-- Nasdaq DD Table -->
+<h3 style="font-family:var(--font-mono);font-weight:400;font-size:16px;color:var(--neon-purple);margin:24px 0 8px">▸ NDX · 纳斯达克综合 重大回撤 (>15%)</h3>
+<div class="data-table-wrap">
+<table class="dd-table">
 <thead><tr>
-<th>#</th><th>时间段</th><th>高点</th><th>低点</th><th>跌幅</th><th>创新低<br>天数</th><th>再创新高<br>天数</th>
-<th>30天后</th><th>60天后</th><th>180天后</th><th>原因归类</th><th>详细原因</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>1</td><td>1973.1 – 1974.9</td><td>136.84</td><td>62.36</td><td class="dn">-54.6%</td><td>630</td><td>1,314</td>
-<td class="dn">-1.8%</td><td class="up">+5.2%</td><td class="up">+28.6%</td>
-<td><span class="tag tag-geo">地缘政治</span></td>
-<td>石油危机+滞胀；高通胀+经济衰退三重打击</td>
-</tr>
-<tr>
-<td>2</td><td>1987.8 – 1987.12</td><td>455.85</td><td>291.86</td><td class="dn">-36.0%</td><td>~100</td><td>~549</td>
-<td class="up">+10.1%</td><td class="up">+15.7%</td><td class="up">+23.2%</td>
-<td><span class="tag tag-shock">技术冲击</span></td>
-<td>黑色星期一程序化交易崩盘；科技股遭遇恐慌抛售</td>
-</tr>
-<tr>
-<td>3</td><td>1990.7 – 1990.10</td><td>471.50</td><td>327.94</td><td class="dn">-30.5%</td><td>~90</td><td>~180</td>
-<td class="up">+3.4%</td><td class="up">+9.2%</td><td class="up">+21.8%</td>
-<td><span class="tag tag-geo">地缘政治</span></td>
-<td>海湾战争+衰退；银行业危机</td>
-</tr>
-<tr>
-<td>4</td><td>1998.7 – 1998.10</td><td>2,014.25</td><td>1,419.12</td><td class="dn">-29.5%</td><td>80</td><td>98</td>
-<td class="up">+11.5%</td><td class="up">+22.8%</td><td class="up">+32.1%</td>
-<td><span class="tag tag-financial">金融传染</span></td>
-<td>亚洲危机→俄罗斯违约→LTCM崩盘；流动性恐慌</td>
-</tr>
-<tr>
-<td>5</td><td>2000.3.10 – 2002.10.9</td><td>5,048.62</td><td>1,114.11</td><td class="dn">-77.9%</td><td>943</td><td>5,479</td>
-<td class="up">+1.5%</td><td class="dn">-2.3%</td><td class="dn">-18.6%</td>
-<td><span class="tag tag-bubble">估值泡沫</span></td>
-<td>互联网泡沫→纳斯达克PE>150倍→2000年3月崩盘→911+丑闻→跌78%。直到2015年才收复5000点。</td>
-</tr>
-<tr>
-<td>6</td><td>2007.10.31 – 2009.3.9</td><td>2,859.12</td><td>1,268.64</td><td class="dn">-55.6%</td><td>495</td><td>1,463</td>
-<td class="up">+10.4%</td><td class="up">+23.7%</td><td class="up">+41.0%</td>
-<td><span class="tag tag-financial">系统性金融</span></td>
-<td>全球金融危机；雷曼破产→信贷冻结；科技股经历次贷冲击</td>
-</tr>
-<tr>
-<td>7</td><td>2011.5 – 2011.10</td><td>2,887.75</td><td>2,335.82</td><td class="dn">-19.1%</td><td>~150</td><td>~100</td>
-<td class="up">+8.3%</td><td class="up">+14.6%</td><td class="up">+26.8%</td>
-<td><span class="tag tag-policy">政治+信用</span></td>
-<td>美国债务上限危机+评级下调；欧债危机</td>
-</tr>
-<tr>
-<td>8</td><td>2018.10 – 2018.12</td><td>8,109.69</td><td>6,192.92</td><td class="dn">-23.6%</td><td>~90</td><td>~120</td>
-<td class="up">+8.2%</td><td class="up">+12.4%</td><td class="up">+22.8%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>美联储缩表+加息；中美贸易战；科技股对利率敏感</td>
-</tr>
-<tr>
-<td>9</td><td>2020.2.19 – 2020.3.23</td><td>9,838.37</td><td>6,860.67</td><td class="dn">-30.3%</td><td>33</td><td>93</td>
-<td class="up">+25.4%</td><td class="up">+38.0%</td><td class="up">+58.2%</td>
-<td><span class="tag tag-shock">外部冲击</span></td>
-<td>COVID-19→技术性衰退；美联储无限量QE→纳斯达克V型反弹最猛</td>
-</tr>
-<tr>
-<td>10</td><td>2021.11.19 – 2022.10.14</td><td>16,212.23</td><td>10,321.39</td><td class="dn">-36.3%</td><td>329</td><td>597</td>
-<td class="up">+1.8%</td><td class="up">+4.5%</td><td class="up">+10.9%</td>
-<td><span class="tag tag-policy">货币紧缩</span></td>
-<td>通胀飙升→暴力加息→科技估值重创；纳斯达克领跌（利率敏感度最高）</td>
-</tr>
-<tr>
-<td>11</td><td>2024.12 – 2025.3</td><td>20,173.37</td><td>17,260.79</td><td class="dn">-14.4%</td><td>~90</td><td>—</td>
-<td class="up">+2.4%</td><td class="up">+5.8%</td><td>—</td>
-<td><span class="tag tag-policy">政策不确定性</span></td>
-<td>特朗普关税政策重启；AI估值过高担忧；通胀反弹+降息预期推迟</td>
-</tr>
+<th>#</th><th>TIME RANGE</th><th>HIGH</th><th>LOW</th><th class="pct">DD%</th><th class="pct">NEW LOW DAYS</th><th class="pct">NEW HIGH DAYS</th>
+<th class="pct">30D</th><th class="pct">60D</th><th class="pct">180D</th><th>CAUSE</th><th>DETAIL</th></tr></thead><tbody>
+<tr><td>1</td><td>1973-01 → 1974-09</td><td>136.84</td><td>62.36</td><td class="pct dn">-54.6%</td><td class="pct">630</td><td class="pct">1,314</td><td class="pct dn">-1.8%</td><td class="pct up">+5.2%</td><td class="pct up">+28.6%</td><td><span class="tag tag-geo">地缘</span></td><td>石油危机+滞胀·高通胀+衰退三重打击</td></tr>
+<tr><td>2</td><td>1987-08 → 1987-12</td><td>455.85</td><td>291.86</td><td class="pct dn">-36.0%</td><td class="pct">~100</td><td class="pct">~549</td><td class="pct up">+10.1%</td><td class="pct up">+15.7%</td><td class="pct up">+23.2%</td><td><span class="tag tag-shock">冲击</span></td><td>黑色星期一·程序化交易·科技股恐慌抛售</td></tr>
+<tr><td>3</td><td>1990-07 → 1990-10</td><td>471.50</td><td>327.94</td><td class="pct dn">-30.5%</td><td class="pct">~90</td><td class="pct">~180</td><td class="pct up">+3.4%</td><td class="pct up">+9.2%</td><td class="pct up">+21.8%</td><td><span class="tag tag-geo">地缘</span></td><td>海湾战争+衰退·银行业危机</td></tr>
+<tr><td>4</td><td>1998-07 → 1998-10</td><td>2,014.25</td><td>1,419.12</td><td class="pct dn">-29.5%</td><td class="pct">80</td><td class="pct">98</td><td class="pct up">+11.5%</td><td class="pct up">+22.8%</td><td class="pct up">+32.1%</td><td><span class="tag tag-financial">金融</span></td><td>亚洲危机→俄罗斯违约→LTCM崩盘</td></tr>
+<tr><td>5</td><td>2000-03-10 → 2002-10-09</td><td>5,048.62</td><td>1,114.11</td><td class="pct dn">-77.9%</td><td class="pct">943</td><td class="pct">5,479</td><td class="pct up">+1.5%</td><td class="pct dn">-2.3%</td><td class="pct dn">-18.6%</td><td><span class="tag tag-bubble">泡沫</span></td><td>互联网泡沫·纳指PE>150×·911+丑闻·15年后才收复</td></tr>
+<tr><td>6</td><td>2007-10-31 → 2009-03-09</td><td>2,859.12</td><td>1,268.64</td><td class="pct dn">-55.6%</td><td class="pct">495</td><td class="pct">1,463</td><td class="pct up">+10.4%</td><td class="pct up">+23.7%</td><td class="pct up">+41.0%</td><td><span class="tag tag-financial">金融</span></td><td>全球金融危机·雷曼破产·信贷冻结</td></tr>
+<tr><td>7</td><td>2011-05 → 2011-10</td><td>2,887.75</td><td>2,335.82</td><td class="pct dn">-19.1%</td><td class="pct">~150</td><td class="pct">~100</td><td class="pct up">+8.3%</td><td class="pct up">+14.6%</td><td class="pct up">+26.8%</td><td><span class="tag tag-policy">政治</span></td><td>美国债务上限·评级下调·欧债危机升级</td></tr>
+<tr><td>8</td><td>2018-10 → 2018-12</td><td>8,109.69</td><td>6,192.92</td><td class="pct dn">-23.6%</td><td class="pct">~90</td><td class="pct">~120</td><td class="pct up">+8.2%</td><td class="pct up">+12.4%</td><td class="pct up">+22.8%</td><td><span class="tag tag-policy">政策</span></td><td>美联储缩表+加息·中美贸易战·科技股利率敏感</td></tr>
+<tr><td>9</td><td>2020-02-19 → 2020-03-23</td><td>9,838.37</td><td>6,860.67</td><td class="pct dn">-30.3%</td><td class="pct">33</td><td class="pct">93</td><td class="pct up">+25.4%</td><td class="pct up">+38.0%</td><td class="pct up">+58.2%</td><td><span class="tag tag-shock">冲击</span></td><td>COVID-19·无限量QE·纳指V型反弹最猛</td></tr>
+<tr><td>10</td><td>2021-11-19 → 2022-10-14</td><td>16,212.23</td><td>10,321.39</td><td class="pct dn">-36.3%</td><td class="pct">329</td><td class="pct">597</td><td class="pct up">+1.8%</td><td class="pct up">+4.5%</td><td class="pct up">+10.9%</td><td><span class="tag tag-policy">政策</span></td><td>通胀飙升→暴力加息·科技估值重创·纳指领跌</td></tr>
+<tr><td>11</td><td>2024-12 → 2025-03</td><td>20,173.37</td><td>17,260.79</td><td class="pct dn">-14.4%</td><td class="pct">~90</td><td class="pct">—</td><td class="pct up">+2.4%</td><td class="pct up">+5.8%</td><td class="pct">—</td><td><span class="tag tag-policy">政策</span></td><td>特朗普关税政策·AI估值过高担忧·通胀反弹</td></tr>
 </tbody></table>
 </div>
 
-<!-- Classification summary -->
-<h3 style="font-family:var(--serif);font-style:italic;font-weight:400;font-size:28px;margin:28px 0 12px;">回撤原因分类统计</h3>
-<div style="overflow-x:auto">
-<table class="drawdown-table">
-<thead><tr><th>原因类别</th><th>标普500 次数</th><th>纳斯达克 次数</th><th>平均跌幅</th><th>平均恢复天数</th><th>代表事件</th></tr></thead>
-<tbody>
-<tr><td><span class="tag tag-policy">货币紧缩/加息</span></td><td>7</td><td>4</td><td>-21%</td><td>~270</td><td>1980, 1982, 2018, 2022, 2023</td></tr>
-<tr><td><span class="tag tag-geo">地缘政治/战争</span></td><td>3</td><td>3</td><td>-43%</td><td>~600</td><td>1973石油危机, 1990海湾战争</td></tr>
-<tr><td><span class="tag tag-financial">系统性金融/债务</span></td><td>3</td><td>3</td><td>-37%</td><td>~450</td><td>2008次贷, 1998 LTCM, 2010欧债</td></tr>
-<tr><td><span class="tag tag-bubble">估值泡沫破裂</span></td><td>1</td><td>1</td><td>-64%</td><td>~3,600</td><td>2000互联网泡沫</td></tr>
-<tr><td><span class="tag tag-shock">外部冲击/技术</span></td><td>2</td><td>2</td><td>-32%</td><td>~170</td><td>1987黑色星期一, 2020 COVID</td></tr>
+<!-- Cause Summary -->
+<h3 style="font-family:var(--font-mono);font-weight:400;font-size:16px;color:var(--neon-cyan);margin:24px 0 8px">▸ 回撤原因分类统计</h3>
+<div class="data-table-wrap" style="max-height:300px">
+<table class="data-table">
+<thead><tr><th>CATEGORY</th><th>SPX COUNT</th><th>NDX COUNT</th><th class="pct">AVG DD</th><th class="pct">AVG RECOVERY DAYS</th><th>REPRESENTATIVE EVENTS</th></tr></thead><tbody>
+<tr><td><span class="tag tag-policy">MONETARY TIGHTENING</span></td><td>7</td><td>3</td><td class="pct dn">-21%</td><td class="pct">~270</td><td>1980·1982·2018·2022·2023</td></tr>
+<tr><td><span class="tag tag-geo">GEOPOLITICAL / WAR</span></td><td>3</td><td>3</td><td class="pct dn">-43%</td><td class="pct">~600</td><td>1973 Oil·1990 Gulf War</td></tr>
+<tr><td><span class="tag tag-financial">SYSTEMIC FINANCIAL</span></td><td>3</td><td>3</td><td class="pct dn">-37%</td><td class="pct">~450</td><td>2008 GFC·1998 LTCM·2010 EU</td></tr>
+<tr><td><span class="tag tag-bubble">VALUATION BUBBLE</span></td><td>1</td><td>1</td><td class="pct dn">-64%</td><td class="pct">~3,600</td><td>2000 Dot-Com</td></tr>
+<tr><td><span class="tag tag-shock">EXTERNAL SHOCK</span></td><td>2</td><td>2</td><td class="pct dn">-32%</td><td class="pct">~170</td><td>1987 Mon·2020 COVID</td></tr>
 </tbody></table>
 </div>
 
-<div class="index-insight" style="margin-top:20px">
-<h3>关键规律</h3>
+<div class="index-insight" style="margin-top:16px">
+<h3>▸ 关键规律</h3>
 <ul>
-<li><strong>V型 vs L型：</strong>供给冲击型（COVID/1987）→V型反转（<6个月恢复）；金融/泡沫型（2008/2000）→L型或漫长煎熬（3-15年恢复）</li>
-<li><strong>纳斯达克跌幅放大效应：</strong>每次回撤中纳斯达克跌幅比标普500多5-25个百分点。科技股对利率和风险偏好的敏感度是蓝筹股的1.3–1.6倍</li>
-<li><strong>30/60/180天规律：</strong>非金融系统性的回撤（地缘、加息）通常在触及低点后<strong>60天内反弹8-18%、180天内反弹15-30%</strong>。2000泡沫例外——180天后继续下跌</li>
-<li><strong>最大回撤的教训：</strong>互联网泡沫（纳指-78%）、次贷危机（标普-57%）的共同点是——估值极端泡沫+系统性风险共振+政策响应迟缓</li>
+<li><strong>V型 vs L型：</strong>供给冲击(COVID/1987)→V型反转(<6月)；金融/泡沫(2008/2000)→L型(3-15年恢复)</li>
+<li><strong>纳斯达克放大效应：</strong>每次回撤NDX比SPX多跌5-25pp·科技股对利率和风险偏好的敏感度为蓝筹股的1.3-1.6×</li>
+<li><strong>30/60/180天：</strong>非金融系统性回撤通常<strong>60天内反弹8-18%、180天内反弹15-30%</strong>·2000泡沫例外</li>
+<li><strong>最深回撤的共同点：</strong>估值极端泡沫+系统性风险共振+政策响应迟缓</li>
 </ul>
 </div>
 </section>
 
 <!-- ═══ CONCLUSIONS ═══ -->
 <section class="panel conclusions" id="conclusions">
+<p class="eyebrow" style="color:var(--neon-cyan)">▸ SUMMARY</p>
 <h2>核心结论</h2>
 <ol>
-<li><strong>美股"慢牛快熊"，长期持有胜率极高：</strong>标普500 55年中有76%的年份上涨。大跌后几乎必然迎来强反弹。对于有耐心的投资者，标普500指数基金是已知最可靠的长期财富积累工具之一。</li>
-<li><strong>纳斯达克是标普500的"杠杆加强版"：</strong>长期回报更高（年化8.6% vs 7.8%），但波动也更大（标准差21% vs 13%）。适合年轻、投资期限长、能承受更大回撤的投资者。</li>
-<li><strong>A股的挑战不在长期回报，而在过程体验：</strong>沪深300全收益年化约9.1%并不差。但暴涨暴跌频繁——普通投资者往往在泡沫顶点冲入、在绝望底部割肉，实际收益远低于指数本身。</li>
-<li><strong>不预测，要认知：</strong>没有人能持续准确预测年度涨跌。但了解每个市场的波动特征、下跌频率和幅度、复苏模式，能帮你建立合理的预期并在市场极端时刻保持冷静。</li>
+<li><strong>美股"慢牛快熊"· 长期持有胜率极高：</strong>标普500 55年76%年份上涨。大跌后几乎必然迎来强反弹。对于有耐心的投资者，标普500指数基金是已知最可靠的长期财富积累工具之一。</li>
+<li><strong>纳斯达克是标普500的"杠杆强核版"：</strong>长期回报更高（+8.6% vs +7.8%）· 波动也更大（σ 21% vs 13%）· 适合年轻、投资期限长、能承受更大回撤的投资者。</li>
+<li><strong>A股的挑战不在长期回报· 而在过程体验：</strong>CSI300全收益年化+9.1%并不差· 但暴涨暴跌频繁——普通投资者往往在泡沫顶点冲入、在绝望底部割肉· 实际收益远低于指数本身。</li>
+<li><strong>不预测· 要认知：</strong>了解每个市场的波动特征、下跌频率和幅度、复苏模式· 比预测涨跌重要得多。</li>
 </ol>
 </section>
 
 <section class="bottom-strip">
-<p>标普500(1971–2025) · 纳斯达克(1971–2025) · 沪深300(2005–2025) —— 均为价格指数口径</p>
-<strong>历史表现不代表未来收益。投资有风险。</strong>
+<p>SPX(1971-2025) · NDX(1971-2025) · CSI300(2005-2025) -- PRICE INDEX ONLY</p>
+<strong>PAST PERFORMANCE ≠ FUTURE RESULTS</strong>
 </section>
 </main>
-<footer class="site-footer"><p>数据来源：Macrotrends / Yahoo Finance / 中证指数。本站面向投资者开放浏览。</p></footer>
+<footer class="site-footer"><p>© DATA: MACROTRENDS / YAHOO FINANCE / CHINA SECURITIES INDEX. FOR INVESTOR REFERENCE ONLY.</p></footer>
 </div>
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   SVG CHART ENGINE — Zero dependencies
+   SVG CHART ENGINE — CYBERPUNK EDITION
    ═══════════════════════════════════════════════════════ */
+const NEON_CYAN='#00e5ff',NEON_PURPLE='#b388ff',NEON_AMBER='#ffb74d';
+const NEON_GREEN='#00e676',NEON_RED='#ff5252';
+const BG='#080c14',TEXT_DIM='#6b7d95';
 
-/* ── DATA ── */
-const SP500 = [
-  1971,10.79, 1972,15.63, 1973,-17.37, 1974,-29.72, 1975,31.55,
-  1976,19.15, 1977,-11.50, 1978,1.06, 1979,12.31, 1980,25.77,
-  1981,-9.73, 1982,14.76, 1983,17.27, 1984,1.40, 1985,26.33,
-  1986,14.62, 1987,2.03, 1988,12.40, 1989,27.25, 1990,-6.56,
-  1991,26.31, 1992,4.46, 1993,7.06, 1994,-1.54, 1995,34.11,
-  1996,20.26, 1997,31.01, 1998,26.67, 1999,19.53, 2000,-10.14,
-  2001,-13.04, 2002,-23.37, 2003,26.38, 2004,8.99, 2005,3.00,
-  2006,13.62, 2007,3.53, 2008,-38.49, 2009,23.45, 2010,12.78,
-  2011,0.00, 2012,13.41, 2013,29.60, 2014,11.39, 2015,-0.73,
-  2016,9.54, 2017,19.42, 2018,-6.24, 2019,28.88, 2020,16.26,
-  2021,26.89, 2022,-19.44, 2023,24.23, 2024,23.31, 2025,16.39
+const SP500=[
+  1971,10.79,1972,15.63,1973,-17.37,1974,-29.72,1975,31.55,
+  1976,19.15,1977,-11.50,1978,1.06,1979,12.31,1980,25.77,
+  1981,-9.73,1982,14.76,1983,17.27,1984,1.40,1985,26.33,
+  1986,14.62,1987,2.03,1988,12.40,1989,27.25,1990,-6.56,
+  1991,26.31,1992,4.46,1993,7.06,1994,-1.54,1995,34.11,
+  1996,20.26,1997,31.01,1998,26.67,1999,19.53,2000,-10.14,
+  2001,-13.04,2002,-23.37,2003,26.38,2004,8.99,2005,3.00,
+  2006,13.62,2007,3.53,2008,-38.49,2009,23.45,2010,12.78,
+  2011,0.00,2012,13.41,2013,29.60,2014,11.39,2015,-0.73,
+  2016,9.54,2017,19.42,2018,-6.24,2019,28.88,2020,16.26,
+  2021,26.89,2022,-19.44,2023,24.23,2024,23.31,2025,16.39
+];
+const NASDAQ=[
+  1971,14.12,1972,17.18,1973,-31.06,1974,-35.11,1975,29.76,
+  1976,26.10,1977,7.33,1978,12.31,1979,28.70,1980,33.26,
+  1981,-3.21,1982,18.67,1983,19.87,1984,-11.31,1985,31.49,
+  1986,7.36,1987,-5.25,1988,15.40,1989,19.24,1990,-17.81,
+  1991,56.86,1992,15.45,1993,14.75,1994,-3.20,1995,39.92,
+  1996,22.71,1997,21.64,1998,39.63,1999,85.59,2000,-39.29,
+  2001,-21.05,2002,-31.53,2003,50.01,2004,8.59,2005,1.37,
+  2006,9.52,2007,9.81,2008,-40.54,2009,43.89,2010,16.91,
+  2011,-1.80,2012,15.91,2013,38.32,2014,13.40,2015,5.73,
+  2016,7.50,2017,28.24,2018,-3.88,2019,35.23,2020,43.64,
+  2021,21.39,2022,-33.10,2023,43.42,2024,28.64,2025,20.36
+];
+const HS300=[
+  2005,22.70,2006,120.60,2007,161.50,2008,-65.90,2009,96.70,
+  2010,-12.50,2011,-25.00,2012,7.60,2013,-7.70,2014,51.70,
+  2015,-40.30,2016,-11.30,2017,21.80,2018,-25.30,2019,36.10,
+  2020,27.20,2021,-5.20,2022,-21.60,2023,-11.40,2024,14.70,2025,20.90
 ];
 
-const NASDAQ = [
-  1971,14.12, 1972,17.18, 1973,-31.06, 1974,-35.11, 1975,29.76,
-  1976,26.10, 1977,7.33, 1978,12.31, 1979,28.70, 1980,33.26,
-  1981,-3.21, 1982,18.67, 1983,19.87, 1984,-11.31, 1985,31.49,
-  1986,7.36, 1987,-5.25, 1988,15.40, 1989,19.24, 1990,-17.81,
-  1991,56.86, 1992,15.45, 1993,14.75, 1994,-3.20, 1995,39.92,
-  1996,22.71, 1997,21.64, 1998,39.63, 1999,85.59, 2000,-39.29,
-  2001,-21.05, 2002,-31.53, 2003,50.01, 2004,8.59, 2005,1.37,
-  2006,9.52, 2007,9.81, 2008,-40.54, 2009,43.89, 2010,16.91,
-  2011,-1.80, 2012,15.91, 2013,38.32, 2014,13.40, 2015,5.73,
-  2016,7.50, 2017,28.24, 2018,-3.88, 2019,35.23, 2020,43.64,
-  2021,21.39, 2022,-33.10, 2023,43.42, 2024,28.64, 2025,20.36
-];
+function pairs(a){var r=[];for(var i=0;i<a.length;i+=2)r.push([a[i],a[i+1]]);return r}
+function r1(v){return Math.round(v*10)/10}
+function pct(v){return(v>=0?'+':'')+r1(v)+'%'}
 
-const HS300 = [
-  2005,22.70, 2006,120.60, 2007,161.50, 2008,-65.90, 2009,96.70,
-  2010,-12.50, 2011,-25.00, 2012,7.60, 2013,-7.70, 2014,51.70,
-  2015,-40.30, 2016,-11.30, 2017,21.80, 2018,-25.30, 2019,36.10,
-  2020,27.20, 2021,-5.20, 2022,-21.60, 2023,-11.40, 2024,14.70,
-  2025,20.90
-];
-
-/* Render helpers */
-function pairs(arr){var r=[];for(var i=0;i<arr.length;i+=2)r.push([arr[i],arr[i+1]]);return r}
-function round1(v){return Math.round(v*10)/10}
-function pct(v){var s=v>=0?'+':'';return s+round1(v)+'%'}
-
-/* ── SVG bar chart ── */
-function drawChart(svgId, data, opts){
+function drawChart(svgId,data,opts){
   opts=opts||{};
-  var svg=document.getElementById(svgId);
-  if(!svg)return;
-  var W=opts.w||1100, H=opts.h||340, LM=52, RM=16, TM=24, BM=52;
-  var chartW=W-LM-RM, chartH=H-TM-BM;
+  var svg=document.getElementById(svgId);if(!svg)return;
+  var W=opts.w||1200,H=opts.h||340,LM=50,RM=16,TM=26,BM=56;
+  var chartW=W-LM-RM,chartH=H-TM-BM;
   var items=pairs(data);
-  if(opts.filter) items=items.filter(opts.filter);
+  if(opts.filter)items=items.filter(opts.filter);
 
   var vals=items.map(function(d){return d[1]});
-  var maxV=Math.max.apply(null,vals.map(Math.abs));
-  // nice round max
-  var nice=[20,30,40,50,60,80,100,120,160,200];
-  for(var i=0;i<nice.length;i++){if(nice[i]>=maxV){maxV=nice[i];break}}
-  if(maxV===undefined)maxV=200;
-  var yScale=chartH/2/maxV;
+  var rawMax=Math.max.apply(null,vals.map(Math.abs));
+  var nice=[20,30,40,50,60,80,100,120,160,200],maxV=nice[nice.length-1];
+  for(var i=0;i<nice.length;i++){if(nice[i]>=rawMax){maxV=nice[i];break}}
+  var yS=chartH/2/maxV;
   var barW=Math.max(2,chartW/items.length*0.7);
   var gap=chartW/items.length;
 
-  var svgNS='http://www.w3.org/2000/svg';
-  function el(tag,attrs){
-    var e=document.createElementNS(svgNS,tag);
-    for(var k in attrs){
-      if(k==='text'){e.textContent=attrs[k]}
-      else{e.setAttribute(k,attrs[k])}
-    }
-    return e;
-  }
-
+  var S='http://www.w3.org/2000/svg';
+  function E(t,a){var e=document.createElementNS(S,t);for(var k in a){if(k==='T')e.textContent=a[k];else e.setAttribute(k,a[k])}return e}
   svg.innerHTML='';
   svg.setAttribute('viewBox','0 0 '+W+' '+H);
-  svg.setAttribute('width','100%');
-  svg.setAttribute('height',(H/W*100).toFixed(1));
+  svg.setAttribute('width','100%');svg.setAttribute('height',(H/W*100).toFixed(1));
+  var g=E('g',{});svg.appendChild(g);
 
-  var g=el('g',{});
-  svg.appendChild(g);
-
-  // bg grid
-  var steps=5;
-  for(var i=-steps;i<=steps;i++){
-    var y=TM+chartH/2 - i*chartH/2/steps;
-    var val=round1(i*maxV/steps);
-    g.appendChild(el('line',{x1:LM,y1:y,x2:W-RM,y2:y,stroke:'rgba(24,20,16,0.08)','stroke-width':'1'}));
-    g.appendChild(el('text',{x:LM-6,y:y+4,'text-anchor':'end',fill:'#7b6e61','font-size':'11',text:val+'%'}));
+  // grid
+  var st=5;
+  for(var i=-st;i<=st;i++){
+    var y=TM+chartH/2-i*chartH/2/st,val=r1(i*maxV/st);
+    g.appendChild(E('line',{x1:LM,y1:y,x2:W-RM,y2:y,stroke:'rgba(0,229,255,0.05)','stroke-width':'1'}));
+    g.appendChild(E('text',{x:LM-6,y:y+4,'text-anchor':'end',fill:TEXT_DIM,'font-size':'10','font-family':"'JetBrains Mono',monospace",T:val+'%'}));
   }
-  // zero line
   var zy=TM+chartH/2;
-  g.appendChild(el('line',{x1:LM,y1:zy,x2:W-RM,y2:zy,stroke:'rgba(18,18,18,0.22)','stroke-width':'1','stroke-dasharray':'6,4'}));
+  g.appendChild(E('line',{x1:LM,y1:zy,x2:W-RM,y2:zy,stroke:'rgba(0,229,255,0.2)','stroke-width':'1','stroke-dasharray':'4,4'}));
 
-  // bars
+  // bars with glow
   for(var j=0;j<items.length;j++){
-    var yr=items[j][0], v=items[j][1];
-    var x=LM+j*gap+gap/2-barW/2;
-    var barH=Math.abs(v)*yScale;
-    var by=v>=0?zy-barH:zy;
-    var color=v>=0?'#1a6b3c':'#c0392b';
-    var bg=v>=0?'rgba(26,107,60,0.74)':'rgba(192,57,43,0.74)';
-    var rx=barW>8?2:1;
+    var yr=items[j][0],v=items[j][1];
+    var x=LM+j*gap+gap/2-barW/2,bh=Math.abs(v)*yS,by=v>=0?zy-bh:zy;
+    var cl=v>=0?NEON_GREEN:NEON_RED;
+    var bg=v>=0?'rgba(0,230,118,0.55)':'rgba(255,82,82,0.55)';
 
-    g.appendChild(el('rect',{x:x.toFixed(1),y:by.toFixed(1),width:barW.toFixed(1),height:barH.toFixed(1),
-      fill:bg,stroke:color,'stroke-width':'1',rx:rx,ry:rx}));
+    var rect=E('rect',{x:x.toFixed(1),y:by.toFixed(1),width:barW.toFixed(1),height:bh.toFixed(1),
+      fill:bg,stroke:cl,'stroke-width':'0.5',rx:'1',ry:'1'});
+    g.appendChild(rect);
 
-    // year label - only show every few years
-    var showLabel=barW>12||(j%Math.max(1,Math.floor(items.length/25))===0);
-    if(showLabel||barW>6){
-      g.appendChild(el('text',{x:(x+barW/2).toFixed(1),y:H-18,'text-anchor':(barW<10?'end':(items.length>40?'end':'middle')),
-        fill:'#5f564d','font-size':(items.length>40?'10':'11'),
-        transform:items.length>40?'rotate(-65,'+(x+barW/2).toFixed(1)+','+(H-18)+')':'',
-        text:String(yr)}));
+    if(barW>12||j%Math.max(1,Math.floor(items.length/24))===0){
+      g.appendChild(E('text',{x:(x+barW/2).toFixed(1),y:H-22,'text-anchor':(items.length>40?'end':'middle'),
+        fill:TEXT_DIM,'font-size':(items.length>40?'9':'10'),'font-family':"'JetBrains Mono',monospace",
+        transform:items.length>40?'rotate(-65,'+(x+barW/2).toFixed(1)+','+(H-22)+')':'',T:String(yr)}));
     }
   }
 
-  // tooltip overlay
-  var overlay=el('rect',{x:LM,y:TM,width:chartW,height:chartH,fill:'transparent'});
-  g.appendChild(overlay);
-
-  var tooltip=el('text',{x:W/2,y:TM-4,'text-anchor':'middle',fill:'#121212','font-size':'14','font-weight':'500'});
-  g.appendChild(tooltip);
-
+  // hover
+  var tip=E('text',{x:W/2,y:TM-4,'text-anchor':'middle',fill:NEON_CYAN,'font-size':'13','font-weight':'500','font-family':"'JetBrains Mono',monospace"});
+  g.appendChild(tip);
   svg.addEventListener('mousemove',function(ev){
-    var rect=svg.getBoundingClientRect();
-    var mx=(ev.clientX-rect.left)*(W/rect.width);
+    var rect=svg.getBoundingClientRect(),mx=(ev.clientX-rect.left)*(W/rect.width);
     var idx=Math.floor((mx-LM)/gap);
-    if(idx<0||idx>=items.length){tooltip.textContent='';return}
-    var d=items[idx];
-    tooltip.textContent=d[0]+': '+pct(d[1]);
+    if(idx<0||idx>=items.length){tip.textContent='';return}
+    tip.textContent=items[idx][0]+' : '+pct(items[idx][1]);
   });
-  svg.addEventListener('mouseleave',function(){tooltip.textContent=''});
+  svg.addEventListener('mouseleave',function(){tip.textContent=''});
 }
 
-/* ── Draw all charts ── */
 drawChart('sp500-svg',SP500,{w:1300,h:360});
 drawChart('nasdaq-svg',NASDAQ,{w:1300,h:360});
 drawChart('hs300-svg',HS300,{w:900,h:360});
 
-/* ── 3-index comparison (2005–2025) ── */
+/* ── 3-index compare ── */
 (function(){
-  var svg=document.getElementById('compare-svg');
-  if(!svg)return;
-  var W=1100,H=440,LM=56,RM=16,TM=24,BM=60,chartW=W-LM-RM,chartH=H-TM-BM;
-
-  // filter to 2005-2025
+  var svg=document.getElementById('compare-svg');if(!svg)return;
+  var W=1100,H=440,LM=56,RM=16,TM=26,BM=60,chartW=W-LM-RM,chartH=H-TM-BM;
   var spx=pairs(SP500).filter(function(d){return d[0]>=2005});
   var ndx=pairs(NASDAQ).filter(function(d){return d[0]>=2005});
   var hs3=pairs(HS300);
-
   var all=spx.concat(ndx).concat(hs3).map(function(d){return d[1]});
-  var maxV=Math.max.apply(null,all.map(Math.abs));
-  maxV=180;
-  var yScale=chartH/2/maxV;
-  var years=spx.map(function(d){return d[0]});
-  var n=years.length;
-  var groupW=chartW/n;
-  var barW=Math.max(2,groupW*0.22);
-  var colors=['#1a4b8c','#0d7377','#c43a31'];
-  var bgs=['rgba(26,75,140,0.72)','rgba(13,115,119,0.72)','rgba(196,58,49,0.72)'];
-  var labels=['标普500','纳斯达克','沪深300'];
-  var datasets=[spx,ndx,hs3];
-
-  var svgNS='http://www.w3.org/2000/svg';
-  function el(tag,attrs){
-    var e=document.createElementNS(svgNS,tag);
-    for(var k in attrs){if(k==='text')e.textContent=attrs[k];else e.setAttribute(k,attrs[k])}
-    return e;
-  }
+  var maxV=180,yS=chartH/2/maxV;
+  var years=spx.map(function(d){return d[0]}),n=years.length;
+  var groupW=chartW/n,barW=Math.max(2,groupW*0.22);
+  var colors=[NEON_CYAN,NEON_PURPLE,NEON_AMBER];
+  var bgs=['rgba(0,229,255,0.55)','rgba(179,136,255,0.55)','rgba(255,183,77,0.55)'];
+  var labels=['SPX','NDX','CSI300'],datasets=[spx,ndx,hs3];
+  var S='http://www.w3.org/2000/svg';
+  function E(t,a){var e=document.createElementNS(S,t);for(var k in a){if(k==='T')e.textContent=a[k];else e.setAttribute(k,a[k])}return e}
   svg.innerHTML='';
   svg.setAttribute('viewBox','0 0 '+W+' '+H);
   svg.setAttribute('width','100%');svg.setAttribute('height',(H/W*100).toFixed(1));
-  var g=el('g',{});svg.appendChild(g);
-
-  // grid
-  var steps=5;
-  for(var i=-steps;i<=steps;i++){
-    var y=TM+chartH/2-i*chartH/2/steps;
-    var val=round1(i*maxV/steps);
-    g.appendChild(el('line',{x1:LM,y1:y,x2:W-RM,y2:y,stroke:'rgba(24,20,16,0.08)','stroke-width':'1'}));
-    g.appendChild(el('text',{x:LM-6,y:y+4,'text-anchor':'end',fill:'#7b6e61','font-size':'11',text:val+'%'}));
+  var g=E('g',{});svg.appendChild(g);
+  var st=5;
+  for(var i=-st;i<=st;i++){
+    var y=TM+chartH/2-i*chartH/2/st,val=r1(i*maxV/st);
+    g.appendChild(E('line',{x1:LM,y1:y,x2:W-RM,y2:y,stroke:'rgba(0,229,255,0.05)','stroke-width':'1'}));
+    g.appendChild(E('text',{x:LM-6,y:y+4,'text-anchor':'end',fill:TEXT_DIM,'font-size':'10','font-family':"'JetBrains Mono',monospace",T:val+'%'}));
   }
   var zy=TM+chartH/2;
-  g.appendChild(el('line',{x1:LM,y1:zy,x2:W-RM,y2:zy,stroke:'rgba(18,18,18,0.22)','stroke-width':'1','stroke-dasharray':'6,4'}));
-
-  // grouped bars
+  g.appendChild(E('line',{x1:LM,y1:zy,x2:W-RM,y2:zy,stroke:'rgba(0,229,255,0.2)','stroke-width':'1','stroke-dasharray':'4,4'}));
   for(var j=0;j<n;j++){
     var gx=LM+j*groupW;
     for(var k=0;k<3;k++){
       var v=datasets[k][j][1];
-      var x=gx+(k-1)*barW+groupW/2-barW/2;
-      var barH=Math.abs(v)*yScale;
-      var by=v>=0?zy-barH:zy;
-      var rx=barW>3?1.5:0.5;
-      g.appendChild(el('rect',{x:x.toFixed(1),y:by.toFixed(1),width:barW.toFixed(1),height:barH.toFixed(1),
-        fill:bgs[k],stroke:colors[k],'stroke-width':'0.8',rx:rx,ry:rx}));
+      var x=gx+(k-1)*barW+groupW/2-barW/2,bh=Math.abs(v)*yS,by=v>=0?zy-bh:zy;
+      g.appendChild(E('rect',{x:x.toFixed(1),y:by.toFixed(1),width:barW.toFixed(1),height:bh.toFixed(1),
+        fill:bgs[k],stroke:colors[k],'stroke-width':'0.5',rx:'1',ry:'1'}));
     }
-    g.appendChild(el('text',{x:(gx+groupW/2).toFixed(1),y:H-16,'text-anchor':'middle',
-      fill:'#5f564d','font-size':'10',text:String(years[j])}));
+    g.appendChild(E('text',{x:(gx+groupW/2).toFixed(1),y:H-16,'text-anchor':'middle',
+      fill:TEXT_DIM,'font-size':'9','font-family':"'JetBrains Mono',monospace",T:String(years[j])}));
   }
-
-  // legend
-  var lx=LM,ly=TM-10;
+  var lx=LM,ly=TM-12;
   for(var k=0;k<3;k++){
-    g.appendChild(el('rect',{x:lx,y:ly,width:10,height:10,fill:bgs[k],stroke:colors[k],'stroke-width':'1'}));
-    g.appendChild(el('text',{x:lx+14,y:ly+10,fill:'#5f564d','font-size':'13',text:labels[k]}));
-    lx+=80;
+    g.appendChild(E('rect',{x:lx,y:ly,width:10,height:10,fill:bgs[k],stroke:colors[k],'stroke-width':'1'}));
+    g.appendChild(E('text',{x:lx+14,y:ly+10,fill:TEXT_DIM,'font-size':'12','font-family':"'JetBrains Mono',monospace",T:labels[k]}));
+    lx+=90;
   }
 })();
 
-/* ── Decade filter for S&P 500 ── */
+/* ── Decade filter ── */
 function sp500ShowDecade(decade){
   var btns=document.querySelectorAll('#sp500 .decade-toggles button');
   for(var i=0;i<btns.length;i++)btns[i].classList.remove('active');
   event.target.classList.add('active');
-
   if(decade==='all'){drawChart('sp500-svg',SP500,{w:1300,h:360});return}
-  var start=parseInt(decade),end=start+9;
-  if(start===2020)end=2025;
-  var filtered=[];
-  var p=pairs(SP500);
-  for(var i=0;i<p.length;i++){if(p[i][0]>=start&&p[i][0]<=end)filtered.push(p[i][0],p[i][1])}
-  drawChart('sp500-svg',filtered,{w:Math.max(600,filtered.length*40),h:360});
+  var start=parseInt(decade),end=start+9;if(start===2020)end=2025;
+  var f=[];var p=pairs(SP500);
+  for(var i=0;i<p.length;i++){if(p[i][0]>=start&&p[i][0]<=end)f.push(p[i][0],p[i][1])}
+  drawChart('sp500-svg',f,{w:Math.max(600,f.length*40),h:360});
 }
 
-/* ── Also add year-by-year data tables ── */
-(function addTables(){
-  function makeTable(svgId,data,opts){
-    var svg=document.getElementById(svgId);
-    if(!svg)return;
-    var div=document.createElement('div');
-    div.className='year-table-wrap';
-    div.style.cssText='max-height:360px;overflow-y:auto;margin-top:16px';
-    var html='<table class="year-table"><thead><tr><th>年份</th><th class="pct">涨跌幅</th><th class="yr">年份</th><th class="pct">涨跌幅</th><th class="yr">年份</th><th class="pct">涨跌幅</th></tr></thead><tbody>';
-    var p=pairs(data);
+/* ── Data tables ── */
+(function(){
+  function tbl(svgId,data){
+    var svg=document.getElementById(svgId);if(!svg)return;
+    var d=document.createElement('div');d.className='data-table-wrap';
+    var p=pairs(data),h='<table class="data-table"><thead><tr><th>YEAR</th><th class="pct">RETURN</th><th>YEAR</th><th class="pct">RETURN</th><th>YEAR</th><th class="pct">RETURN</th></tr></thead><tbody>';
     for(var i=0;i<p.length;i+=3){
-      html+='<tr>';
-      for(var j=0;j<3&&(i+j)<p.length;j++){
-        var d=p[i+j];
-        html+='<td>'+d[0]+'</td><td class="pct '+(d[1]>=0?'up':'dn')+'">'+pct(d[1])+'</td>';
-      }
-      html+='</tr>';
+      h+='<tr>';
+      for(var j=0;j<3&&(i+j)<p.length;j++){var r=p[i+j];h+='<td>'+r[0]+'</td><td class="pct '+(r[1]>=0?'up':'dn')+'">'+pct(r[1])+'</td>'}
+      h+='</tr>';
     }
-    html+='</tbody></table>';
-    div.innerHTML=html;
-    svg.parentNode.appendChild(div);
+    h+='</tbody></table>';d.innerHTML=h;svg.parentNode.appendChild(d);
   }
-  makeTable('sp500-svg',SP500);
-  makeTable('nasdaq-svg',NASDAQ);
-  makeTable('hs300-svg',HS300);
+  tbl('sp500-svg',SP500);tbl('nasdaq-svg',NASDAQ);tbl('hs300-svg',HS300);
 })();
 
-/* ═══ DRAWDOWN WATERFALL CHART ═══ */
-(function drawDrawdowns(){
-  var svg=document.getElementById('dd-svg');
-  if(!svg)return;
-  var W=1320,H=340,LM=280,RM=16,TM=30,BM=20,chartW=W-LM-RM,chartH=H-TM-BM;
-
-  // S&P 500 drawdown events
-  var events=[
-    {label:'1973石油危机',start:1973,end:1974,dd:-48.2,cat:'geo',spx:true,color:'#3a3a9f'},
-    {label:'1980加息',start:1980,end:1980,dd:-17.1,cat:'policy',spx:true,color:'#d2691e'},
-    {label:'1982衰退',start:1981,end:1982,dd:-27.1,cat:'policy',spx:true,color:'#d2691e'},
-    {label:'1984加息',start:1983.8,end:1984.6,dd:-14.4,cat:'policy',spx:true,color:'#d2691e'},
-    {label:'1987黑色星期一',start:1987.7,end:1987.9,dd:-33.5,cat:'shock',spx:true,color:'#1b5e20'},
-    {label:'1990海湾战争',start:1990.5,end:1990.8,dd:-19.9,cat:'geo',spx:true,color:'#3a3a9f'},
-    {label:'1998 LTCM',start:1998.6,end:1998.7,dd:-19.3,cat:'financial',spx:true,color:'#c62828'},
-    {label:'2000互联网泡沫',start:2000.2,end:2002.8,dd:-49.1,cat:'bubble',spx:true,color:'#7b2d8e'},
-    {label:'2008次贷危机',start:2007.8,end:2009.2,dd:-56.8,cat:'financial',spx:true,color:'#c62828'},
-    {label:'2010欧债',start:2010.3,end:2010.5,dd:-16.0,cat:'financial',spx:true,color:'#c62828'},
-    {label:'2011评级下调',start:2011.3,end:2011.8,dd:-19.4,cat:'policy',spx:true,color:'#d2691e'},
-    {label:'2018贸易战',start:2018.7,end:2018.9,dd:-19.8,cat:'policy',spx:true,color:'#d2691e'},
-    {label:'2020 COVID',start:2020.2,end:2020.3,dd:-33.9,cat:'shock',spx:true,color:'#1b5e20'},
-    {label:'2022通胀加息',start:2022.1,end:2022.8,dd:-25.4,cat:'policy',spx:true,color:'#d2691e'},
-    {label:'2023债市冲击',start:2023.6,end:2023.8,dd:-10.3,cat:'policy',spx:true,color:'#d2691e'},
-    // Nasdaq
-    {label:'纳指-2000泡沫',start:2000.2,end:2002.8,dd:-77.9,cat:'bubble',spx:false,color:'#7b2d8e'},
-    {label:'纳指-2022通胀',start:2022.1,end:2022.8,dd:-36.3,cat:'policy',spx:false,color:'#d2691e'},
+/* ── Drawdown waterfall ── */
+(function(){
+  var svg=document.getElementById('dd-svg');if(!svg)return;
+  var W=1320,H=320,LM=280,RM=16,TM=24,BM=20,chartW=W-LM-RM,chartH=H-TM-BM;
+  var evs=[
+    {l:'1973 Oil Crisis',s:1973,e:1974,dd:-48.2,cl:'rgba(100,140,255,0.75)'},
+    {l:'1980 Rate Hike',s:1980,e:1980.8,dd:-17.1,cl:'rgba(210,150,50,0.75)'},
+    {l:'1982 Recession',s:1981,e:1982.6,dd:-27.1,cl:'rgba(210,150,50,0.75)'},
+    {l:'1987 Black Mon',s:1987.6,e:1987.9,dd:-33.5,cl:'rgba(0,200,80,0.75)'},
+    {l:'1990 Gulf War',s:1990.5,e:1990.8,dd:-19.9,cl:'rgba(100,140,255,0.75)'},
+    {l:'1998 LTCM',s:1998.5,e:1998.7,dd:-19.3,cl:'rgba(255,100,100,0.75)'},
+    {l:'2000 Dot-Com',s:2000.2,e:2002.8,dd:-49.1,cl:'rgba(200,130,255,0.75)'},
+    {l:'2008 GFC',s:2007.8,e:2009.2,dd:-56.8,cl:'rgba(255,100,100,0.75)'},
+    {l:'2010 EU Debt',s:2010.3,e:2010.5,dd:-16.0,cl:'rgba(255,100,100,0.75)'},
+    {l:'2011 Rating Cut',s:2011.3,e:2011.8,dd:-19.4,cl:'rgba(210,150,50,0.75)'},
+    {l:'2018 Trade War',s:2018.7,e:2018.9,dd:-19.8,cl:'rgba(210,150,50,0.75)'},
+    {l:'2020 COVID',s:2020.2,e:2020.3,dd:-33.9,cl:'rgba(0,200,80,0.75)'},
+    {l:'2022 Inflation',s:2022.1,e:2022.8,dd:-25.4,cl:'rgba(210,150,50,0.75)'},
+    {l:'2023 Bond Shock',s:2023.6,e:2023.8,dd:-10.3,cl:'rgba(210,150,50,0.7)'},
+    {l:'NDX 2000 -78%',s:2000.2,e:2002.8,dd:-77.9,cl:'rgba(200,130,255,0.5)'},
+    {l:'NDX 2022 -36%',s:2022.1,e:2022.8,dd:-36.3,cl:'rgba(210,150,50,0.5)'},
   ];
-
-  var svgNS='http://www.w3.org/2000/svg';
-  function el(tag,attrs){
-    var e=document.createElementNS(svgNS,tag);
-    for(var k in attrs){if(k==='text')e.textContent=attrs[k];else e.setAttribute(k,attrs[k])}
-    return e;
-  }
+  var S='http://www.w3.org/2000/svg';
+  function E(t,a){var e=document.createElementNS(S,t);for(var k in a){if(k==='T')e.textContent=a[k];else e.setAttribute(k,a[k])}return e}
   svg.innerHTML='';
   svg.setAttribute('viewBox','0 0 '+W+' '+H);
   svg.setAttribute('width','100%');svg.setAttribute('height',(H/W*100).toFixed(1));
-  var g=el('g',{});svg.appendChild(g);
+  var g=E('g',{});svg.appendChild(g);
+  var minY=1972,maxY=2026;
+  function xY(y){return LM+(y-minY)/(maxY-minY)*chartW}
+  var maxDD=100,ddScale=chartH/maxDD;
 
-  // Time axis
-  var minYear=1972,maxYear=2026;
-  function xForYear(y){return LM+(y-minYear)/(maxYear-minYear)*chartW}
-  // DD axis
-  var maxDD=90,ddScale=chartH/maxDD;
-
-  // Grid lines
-  for(var i=0;i<=90;i+=20){
+  for(var i=0;i<=100;i+=20){
     var y=TM+i*ddScale;
-    g.appendChild(el('line',{x1:LM,y1:y,x2:W-RM,y2:y,stroke:'rgba(24,20,16,0.06)','stroke-width':'1'}));
-    g.appendChild(el('text',{x:LM-6,y:y+4,'text-anchor':'end',fill:'#7b6e61','font-size':'10',text:'-'+i+'%'}));
+    g.appendChild(E('line',{x1:LM,y1:y,x2:W-RM,y2:y,stroke:'rgba(0,229,255,0.05)','stroke-width':'1'}));
+    g.appendChild(E('text',{x:LM-6,y:y+4,'text-anchor':'end',fill:TEXT_DIM,'font-size':'9','font-family':"'JetBrains Mono',monospace",T:'-'+i+'%'}));
   }
-  // zero line
-  g.appendChild(el('line',{x1:LM,y1:TM,x2:W-RM,y2:TM,stroke:'rgba(18,18,18,0.18)','stroke-width':'1'}));
 
-  // bars — S&P 500 on top half, Nasdaq on bottom
-  for(var j=0;j<events.length;j++){
-    var ev=events[j];
-    var x1=xForYear(ev.start),x2=xForYear(ev.end);
-    var w=Math.max(4,x2-x1);
-    var h=Math.abs(ev.dd)*ddScale;
-    var y=TM; // bars grow downward from top
-    var opacity=ev.spx?0.78:0.65;
+  for(var j=0;j<evs.length;j++){
+    var ev=evs[j];
+    var x1=xY(ev.s),x2=xY(ev.e),w=Math.max(3,x2-x1),h=Math.abs(ev.dd)*ddScale;
     var barH=Math.min(h,chartH-2);
-
-    g.appendChild(el('rect',{x:x1.toFixed(1),y:y.toFixed(1),width:w.toFixed(1),height:barH.toFixed(1),
-      fill:ev.color,opacity:opacity,'stroke-width':'0',rx:'2',ry:'2'}));
-
-    // Label
-    if(w>18){
-      g.appendChild(el('text',{x:(x1+w/2).toFixed(1),y:y+barH+13,'text-anchor':'middle',fill:ev.color,
-        'font-size':'9','font-weight':'500',text:ev.label+' ('+ev.dd+'%)'}));
-    } else {
-      g.appendChild(el('text',{x:(x1+w/2).toFixed(1),y:y+barH+11,'text-anchor':'middle',fill:ev.color,
-        'font-size':'8','transform':'rotate(-70,'+(x1+w/2).toFixed(1)+','+(y+barH+11)+')',
-        text:ev.label+' '+ev.dd+'%'}));
+    g.appendChild(E('rect',{x:x1.toFixed(1),y:TM.toFixed(1),width:w.toFixed(1),height:barH.toFixed(1),
+      fill:ev.cl,'stroke-width':'0',rx:'1',ry:'1'}));
+    if(w>10){
+      g.appendChild(E('text',{x:(x1+w/2).toFixed(1),y:TM+barH+12,'text-anchor':'middle',fill:ev.cl,
+        'font-size':'8','font-family':"'JetBrains Mono',monospace",T:ev.l}));
     }
   }
-
-  // Legend
-  var legendItems=[
-    {label:'标普500',color:'#121212'},
-    {label:'纳斯达克',color:'#5f564d'}
-  ];
-  for(var k=0;k<2;k++){
-    var lx=W-180,ly=TM+10+k*16;
-    g.appendChild(el('rect',{x:lx,y:ly,width:10,height:10,fill:'#121212',opacity:k===0?0.78:0.45,rx:'2',ry:'2'}));
-    g.appendChild(el('text',{x:lx+14,y:ly+10,fill:'#5f564d','font-size':'11',text:legendItems[k].label}));
-  }
-})();
-</script>
+})();</script>
 </body>
 </html>
