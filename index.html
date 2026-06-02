@@ -263,13 +263,13 @@ a{color:var(--accent);text-decoration:none}
 </div>
 </div>
 <div class="chart-toggles">
-<button class="active" onclick="sp500Decade('all')">ALL</button>
-<button onclick="sp500Decade('1970')">1970s</button>
-<button onclick="sp500Decade('1980')">1980s</button>
-<button onclick="sp500Decade('1990')">1990s</button>
-<button onclick="sp500Decade('2000')">2000s</button>
-<button onclick="sp500Decade('2010')">2010s</button>
-<button onclick="sp500Decade('2020')">2020s</button>
+<button class="active" onclick="sp500Decade('all',event)">ALL</button>
+<button onclick="sp500Decade('1970',event)">1970s</button>
+<button onclick="sp500Decade('1980',event)">1980s</button>
+<button onclick="sp500Decade('1990',event)">1990s</button>
+<button onclick="sp500Decade('2000',event)">2000s</button>
+<button onclick="sp500Decade('2010',event)">2010s</button>
+<button onclick="sp500Decade('2020',event)">2020s</button>
 </div>
 <div class="chart-wrap"><svg id="sp500-svg"></svg></div>
 <div class="insight-box">
@@ -335,10 +335,10 @@ a{color:var(--accent);text-decoration:none}
 <p class="section-subtitle">假设1971年初投入$1，年末按年度涨跌幅复利滚动。对数尺度。价格指数口径。</p>
 </div>
 <div class="chart-toggles">
-<button class="active" onclick="cumChart('all')">ALL · 1971-2025</button>
-<button onclick="cumChart('1980')">FROM 1980</button>
-<button onclick="cumChart('1990')">FROM 1990</button>
-<button onclick="cumChart('2000')">FROM 2000</button>
+<button class="active" onclick="cumChart('all',event)">ALL · 1971-2025</button>
+<button onclick="cumChart('1980',event)">FROM 1980</button>
+<button onclick="cumChart('1990',event)">FROM 1990</button>
+<button onclick="cumChart('2000',event)">FROM 2000</button>
 </div>
 <div class="chart-wrap"><svg id="cum-svg"></svg></div>
 <div class="insight-box">
@@ -533,10 +533,11 @@ function barChart(svgId,data,opts){
 }
 
 /* ── CUMULATIVE LINE CHART ── */
-function cumChart(range){
+function cumChart(range,evt){
   var btns=document.querySelectorAll('#cumulative .chart-toggles button');
   for(var i=0;i<btns.length;i++)btns[i].classList.remove('active');
-  event.target.classList.add('active');
+  if(evt&&evt.target)evt.target.classList.add('active');
+  else if(btns.length){btns[0].classList.add('active')}
 
   var spx=pairs(SP500),ndx=pairs(NASDAQ),hs3=pairs(HS300);
   var startYear=1971;
@@ -605,10 +606,11 @@ barChart('hs300-svg',HS300,{w:1000,h:420});
 cumChart('all');
 
 /* ── S&P 500 decade filter ── */
-function sp500Decade(decade){
+function sp500Decade(decade,evt){
   var btns=document.querySelectorAll('#sp500 .chart-toggles button');
   for(var i=0;i<btns.length;i++)btns[i].classList.remove('active');
-  event.target.classList.add('active');
+  if(evt&&evt.target)evt.target.classList.add('active');
+  else if(btns.length)btns[0].classList.add('active');
   if(decade==='all'){barChart('sp500-svg',SP500,{w:1400,h:420});return}
   var s=parseInt(decade),e=s+9;if(s===2020)e=2025;
   var f=[];var p=pairs(SP500);
