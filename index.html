@@ -107,8 +107,8 @@ a{color:var(--accent);text-decoration:none}
 
 /* ── Charts ── */
 .chart-wrap{position:relative;width:100%;margin:0 auto 14px;overflow-x:auto;background:var(--card);
-  border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 8px 4px}
-.chart-wrap svg{display:block;width:100%;min-width:700px}
+  border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px 4px 4px}
+.chart-wrap svg{display:block;width:100%;min-width:900px;height:auto}
 
 /* ── Toggles ── */
 .chart-toggles{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
@@ -145,8 +145,8 @@ a{color:var(--accent);text-decoration:none}
 .dd-card span{font-size:10px;color:var(--muted);font-family:var(--mono)}
 .dd-card.danger strong{color:var(--red)}
 .dd-viz-wrap{border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px;background:var(--card);
-  margin:14px 0;height:300px}
-.dd-viz-wrap svg{width:100%;height:100%}
+  margin:14px 0;height:340px;overflow:visible}
+.dd-viz-wrap svg{width:100%;height:100%;display:block}
 
 /* ── DD table ── */
 .dd-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px}
@@ -358,7 +358,7 @@ a{color:var(--accent);text-decoration:none}
 <div><p class="eyebrow">CROSS-COMPARISON</p><h2><em>三大指数</em> 同框 [2005–2025]</h2></div>
 <p class="section-subtitle">统一价格指数口径 · 三大指数共存完整数据</p>
 </div>
-<div class="chart-wrap" style="max-height:440px;overflow-y:auto"><svg id="compare-svg"></svg></div>
+<div class="chart-wrap" style="max-height:520px;overflow-y:auto"><svg id="compare-svg"></svg></div>
 <div class="compare-grid">
 <div class="compare-card"><h4>SPX vs NDX</h4><p>同年同向概率~91% · 纳斯达克弹性为SPX的<strong>1.5-1.8×</strong> · 科技权重差异是唯一解释</p></div>
 <div class="compare-card"><h4>US vs CN</h4><p>相关性<strong>~0.15</strong> · 2022年同步跌但2023年SPX+24%/NDX+43%而CSI300续跌-11% · 驱动逻辑截然不同</p></div>
@@ -554,7 +554,7 @@ function cumChart(range){
   }
   var lines=[{d:spxF,c:C.cyan,l:'SPX'},{d:ndxF,c:C.purple,l:'NDX'},{d:hs3F,c:C.amber,l:'CSI300'}];
 
-  var W=1200,H=360,LM=56,RM=20,TM=24,BM=52,cw=W-LM-RM,ch=H-TM-BM;
+  var W=1300,H=420,LM=56,RM=20,TM=24,BM=52,cw=W-LM-RM,ch=H-TM-BM;
   var allV=[];for(var k=0;k<lines.length;k++){for(var m=0;m<lines[k].d.length;m++)allV.push(lines[k].d[m][1])}
   var vMin=0.5,vMax=Math.max.apply(null,allV)*1.1;
   // log scale for visual impact
@@ -599,9 +599,9 @@ function cumChart(range){
 }
 
 /* ── DRAW ALL ── */
-barChart('sp500-svg',SP500,{w:1300,h:340});
-barChart('nasdaq-svg',NASDAQ,{w:1300,h:340});
-barChart('hs300-svg',HS300,{w:900,h:340});
+barChart('sp500-svg',SP500,{w:1400,h:420});
+barChart('nasdaq-svg',NASDAQ,{w:1400,h:420});
+barChart('hs300-svg',HS300,{w:1000,h:420});
 cumChart('all');
 
 /* ── S&P 500 decade filter ── */
@@ -609,17 +609,17 @@ function sp500Decade(decade){
   var btns=document.querySelectorAll('#sp500 .chart-toggles button');
   for(var i=0;i<btns.length;i++)btns[i].classList.remove('active');
   event.target.classList.add('active');
-  if(decade==='all'){barChart('sp500-svg',SP500,{w:1300,h:340});return}
+  if(decade==='all'){barChart('sp500-svg',SP500,{w:1400,h:420});return}
   var s=parseInt(decade),e=s+9;if(s===2020)e=2025;
   var f=[];var p=pairs(SP500);
   for(var i=0;i<p.length;i++){if(p[i][0]>=s&&p[i][0]<=e)f.push(p[i][0],p[i][1])}
-  barChart('sp500-svg',f,{w:Math.max(600,f.length*42),h:340});
+  barChart('sp500-svg',f,{w:Math.max(700,f.length*50),h:420});
 }
 
 /* ── Compare chart ── */
 (function(){
   var svg=document.getElementById('compare-svg');if(!svg)return;
-  var W=1100,H=420,LM=56,RM=16,TM=22,BM=58,cw=W-LM-RM,ch=H-TM-BM;
+  var W=1200,H=520,LM=56,RM=16,TM=22,BM=58,cw=W-LM-RM,ch=H-TM-BM;
   var spx=pairs(SP500).filter(function(d){return d[0]>=2005});
   var ndx=pairs(NASDAQ).filter(function(d){return d[0]>=2005});
   var hs3=pairs(HS300);
@@ -671,7 +671,7 @@ function sp500Decade(decade){
 /* ── Drawdown waterfall ── */
 (function(){
   var svg=document.getElementById('dd-svg');if(!svg)return;
-  var W=1280,H=300,LM=270,RM=16,TM=20,BM=20,cw=W-LM-RM,ch=H-TM-BM;
+  var W=1320,H=340,LM=280,RM=16,TM=22,BM=20,cw=W-LM-RM,ch=H-TM-BM;
   var evs=[
     {l:'1973 Oil Crisis',s:1973,e:1974.8,dd:-48.2,c:'rgba(37,99,235,0.7)'},
     {l:'1980 Rate Hike',s:1980,e:1980.2,dd:-17.1,c:'rgba(217,119,6,0.7)'},
